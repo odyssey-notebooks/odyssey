@@ -12,7 +12,9 @@ The Odyssey project has several deliverables:
 
 ### Core
 Page, View, Representation, Part - UI Types
+
 Archetype, Feature, Field, Notion, Tags, Entity - Data Types
+
 - Define these types
 - Create validators via AJV
 - Schemas vs instances
