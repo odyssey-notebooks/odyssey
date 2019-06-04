@@ -7,6 +7,9 @@
     "husky": "^2.2.0",
     "lerna": "^3.14.1"
   },
+  "scripts": {
+    "postinstall": "lerna bootstrap --loglevel warn"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
