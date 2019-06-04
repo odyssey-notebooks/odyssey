@@ -1,9 +1,11 @@
 module.exports = {
   'env': {
     'es6': true,
-    'node': true
+    'node': true,
+    'jest/globals': true
   },
   'extends': 'standard',
+  "parser": "babel-eslint",
   'globals': {
     'Atomics': 'readonly',
     'SharedArrayBuffer': 'readonly'
@@ -13,5 +15,6 @@ module.exports = {
     'sourceType': 'module'
   },
   'rules': {
-  }
+  },
+  "plugins": ["jest"]
 }
