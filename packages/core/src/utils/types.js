@@ -1,3 +1,4 @@
+// Intentionally not including Symbol, Error, Map, and others
 export const TYPES = [
   'number',
   'boolean',
@@ -5,7 +6,8 @@ export const TYPES = [
   'object',
   'array',
   'function',
-  'class',
+  'regex',
+  'date',
   'null',
   'undefined'
 ]
@@ -15,13 +17,14 @@ export function isValidType(arg) {
 }
 
 export function typeOf(arg) {
-  if (arg === undefined) return 'undefined'
-  if (arg === null) return 'null'
-  if (Array.isArray(arg)) return 'array'
   const type = typeof arg
-  const simpleTypes = ['number', 'boolean', 'string', 'function', 'object']
-  if (simpleTypes.includes(type)) return type
-  else return '?'
+  if (type === 'object') {
+    if (arg === null) return 'null'
+    if (Array.isArray(arg)) return 'array'
+    if (arg.constructor === RegExp) return 'regexp'
+    if (arg.constructor === Date) return 'date'
+    else return 'object'
+  } else return type
 }
 
 export function isType(arg, typeOrTypes) {

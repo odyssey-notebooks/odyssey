@@ -16,7 +16,6 @@ describe('isValidType', () => {
   })
   it('returns true for valid types', () => {
     expect(isValidType('array')).toBe(true)
-    expect(isValidType('class')).toBe(true)
     expect(isValidType('number')).toBe(true)
   })
 })
@@ -41,10 +40,6 @@ describe('typeOf', () => {
   })
   it('handles functions', () => {
     const foo = () => {}
-    expect(typeOf(foo)).toBe('function')
-  })
-  it('handles functions', () => {
-    const foo = () => {}
     function bar() {}
     expect(typeOf(foo)).toBe('function')
     expect(typeOf(bar)).toBe('function')
@@ -53,6 +48,13 @@ describe('typeOf', () => {
     class Foo {}
     expect(Foo).toBeInstanceOf(Function)
     expect(typeOf(Foo)).toBe('function')
+  })
+  it('handles regular expressions', () => {
+    expect(typeOf(/./)).toBe('regexp')
+  })
+  it('handles regular expressions', () => {
+    const now = new Date()
+    expect(typeOf(now)).toBe('date')
   })
 })
 
