@@ -1,3 +1,5 @@
+import { ifArrayElse } from './ifElse.js'
+
 // Intentionally not including Symbol, Error, Map, and others
 export const TYPES = [
   'number',
@@ -27,12 +29,19 @@ export function typeOf(arg) {
   } else return type
 }
 
+export function _isOneOfTypes(arg, types) {
+  return types.includes(typeOf(arg))
+}
+
+export function _isExactlyType(arg, type) {
+  if (typeof type !== 'string') throw new Error('Type(s) to be compared against must be string names of those types.')
+  return type === typeOf(arg)
+}
+
 export function isType(arg, typeOrTypes) {
-  if (Array.isArray(typeOrTypes)) {
-    return typeOrTypes.includes(typeOf(arg))
-  }
-  if (typeof typeOrTypes === 'string') {
-    return typeOrTypes === typeOf(arg)
-  }
-  throw new Error('second argument must be array or string')
+  return ifArrayElse(
+    typeOrTypes,
+    types => _isOneOfTypes(arg, types),
+    type => _isExactlyType(arg, type)
+  )
 }
