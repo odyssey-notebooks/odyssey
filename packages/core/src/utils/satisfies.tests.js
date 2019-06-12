@@ -17,6 +17,7 @@ describe('satisfies', () => {
     expect(() => satisfies(false, { type: 'boolean' })).not.toThrow()
     expect(() => satisfies('', { type: 'string' })).not.toThrow()
     expect(() => satisfies({}, { type: 'object' })).not.toThrow()
+    expect(() => satisfies([], { type: 'array' })).not.toThrow()
   })
   it('validates lengths for strings and arrays, and throws for other data types', () => {
     expect(() => satisfies(0, { length: { min: 1 } })).toThrow()
@@ -24,5 +25,7 @@ describe('satisfies', () => {
     expect(() => satisfies(false, { length: { min: 1 } })).toThrow()
     expect(() => satisfies('F', { length: { min: 1 } })).not.toThrow()
     expect(() => satisfies([0], { length: { min: 1 } })).not.toThrow()
+    expect(() => satisfies([0, 1], { length: { max: 1 } })).toThrow()
+    expect(() => satisfies([0, 1], { length: { max: 2 } })).not.toThrow()
   })
 })
