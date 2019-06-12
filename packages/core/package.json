@@ -10,6 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "browserslist": ">1% in US and not ie 11, last 2 safari versions, maintained node versions",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",

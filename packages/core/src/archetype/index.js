@@ -1,7 +1,9 @@
-import Archetype from './class'
+import Archetype from './class.js'
+import newArchetype from './factory.js'
 
-export { Archetype }
-
-export default {
-  class: Archetype
+export {
+  Archetype,
+  newArchetype
 }
+
+export default newArchetype

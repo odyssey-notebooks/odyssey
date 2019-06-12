@@ -4,13 +4,13 @@ module.exports = {
       '@babel/preset-env',
       {
         targets: {
-          node: 'current',
-        },
-      },
-    ],
+          node: 'current'
+        }
+      }
+    ]
   ],
   plugins: [
-    "@babel/plugin-syntax-dynamic-import",
-    "transform-dynamic-import"
+    '@babel/plugin-syntax-dynamic-import',
+    'transform-dynamic-import'
   ]
-};
+}
