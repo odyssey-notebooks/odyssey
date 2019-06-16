@@ -1,4 +1,4 @@
-import satisfies from './satisfies'
+import { satisfies } from './satisfies.js'
 
 describe('satisfies', () => {
   it('is a function of arity 2', () => {
