@@ -10,8 +10,8 @@ class Archetype {
     }
   }) {
     this.name = satisfies(name, { type: 'string', length: { min: 1 } })
-    this.features = satisfies(features, { type: ['object', 'array'] })
     this.fields = satisfies(fields, { type: 'array' })
+    this.features = satisfies(features, { type: ['object', 'array'] })
     this.reprs = satisfies(reprs, { type: 'object' })
   }
 
