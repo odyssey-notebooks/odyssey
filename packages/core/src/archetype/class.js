@@ -1,7 +1,4 @@
-const _required = (argument) => {
-  if (!argument) throw new Error('Archetype could not be initialized; a name is required.')
-  return argument
-}
+import { satisfies } from '../utils'
 
 class Archetype {
   constructor({
@@ -12,10 +9,10 @@ class Archetype {
       string: {}
     }
   }) {
-    this.name = _required(name)
-    this.features = features
-    this.fields = fields
-    this.reprs = reprs
+    this.name = satisfies(name, { type: 'string', length: { min: 1 } })
+    this.features = satisfies(features, { type: ['object', 'array'] })
+    this.fields = satisfies(fields, { type: 'array' })
+    this.reprs = satisfies(reprs, { type: 'object' })
   }
 
   toJson() {

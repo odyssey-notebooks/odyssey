@@ -13,15 +13,15 @@ describe('the Archetype class constructor', () => {
   function newArchetype(additionalOptions) {
     return () => new Archetype({ name: 'Foo', ...additionalOptions })
   }
-  it('accepts option "features" as an Array(Strings) or Object', () => {
+  it('accepts option "features" as an Array or Object', () => {
     expect(newArchetype({ features: [] })).not.toThrow()
     expect(newArchetype({ features: {} })).not.toThrow()
     expect(newArchetype({ features: '' })).toThrow()
   })
-  it('accepts option "fields" as an Array(Objects)', () => {
+  it('accepts option "fields" as an Array', () => {
     expect(newArchetype({ fields: [] })).not.toThrow()
     expect(newArchetype({ fields: [{ type: 'text', label: 'text' }] })).not.toThrow()
-    expect(newArchetype({ fields: ['Foo'] })).toThrow()
+    expect(newArchetype({ fields: 'Foo' })).toThrow()
     expect(newArchetype({ fields: {} })).toThrow()
   })
   it('accepts option "reprs" as an Object', () => {
