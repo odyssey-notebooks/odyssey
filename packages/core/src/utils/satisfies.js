@@ -31,7 +31,7 @@ function _satisfiesLengthConstraints(arg, { min, max }) {
  * Constraints can declare a type or array of types for the argument to match against, and min/max lengths.
  * Explicit type-checking implies checking for existence, as nonexistent args would be of type 'undefined'
  */
-function satisfies(arg, constraints) {
+export function satisfies(arg, constraints) {
   throwIf(typeOf(constraints) !== 'object', 'Second argument of satisfies() must be an Object')
   if (constraints.type) {
     _satisfiesTypeConstraints(arg, constraints.type)
@@ -40,5 +40,3 @@ function satisfies(arg, constraints) {
     _satisfiesLengthConstraints(arg, constraints.length)
   }
 }
-
-export default satisfies
