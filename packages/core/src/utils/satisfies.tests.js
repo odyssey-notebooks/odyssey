@@ -28,4 +28,7 @@ describe('satisfies', () => {
     expect(() => satisfies([0, 1], { length: { max: 1 } })).toThrow()
     expect(() => satisfies([0, 1], { length: { max: 2 } })).not.toThrow()
   })
+  it('returns the evaluated arg if it doesn\'t throw', () => {
+    expect(satisfies(10, { type: 'number' })).toBe(10)
+  })
 })

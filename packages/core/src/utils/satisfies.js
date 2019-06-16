@@ -27,6 +27,7 @@ function _satisfiesLengthConstraints(arg, { min, max }) {
  * Evaluates an argument agains a set of constraints and errors if the constraint is not met,
  * @param {*} arg - An argument to be evaluated
  * @param {object} constraints - A schema of evaluations
+ * @returns {*} the input arg, if it didn't throw any errors
  *
  * Constraints can declare a type or array of types for the argument to match against, and min/max lengths.
  * Explicit type-checking implies checking for existence, as nonexistent args would be of type 'undefined'
@@ -39,4 +40,5 @@ export function satisfies(arg, constraints) {
   if (constraints.length) {
     _satisfiesLengthConstraints(arg, constraints.length)
   }
+  return arg
 }
