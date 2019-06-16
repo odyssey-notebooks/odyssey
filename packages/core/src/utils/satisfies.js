@@ -1,41 +1,43 @@
-import { typeOf } from './types.js'
+import { typeOf, isType } from './types.js'
+import { throwIf } from './throwIf.js'
 
-function _expectToBeInstanceOf(value, constructor, message) {
-  if (value.constructor !== constructor) throw new Error(message)
+function _satisfiesTypeConstraints(arg, typeOrTypes) {
+  throwIf(
+    !isType(arg, typeOrTypes),
+    isType(typeOrTypes, 'array')
+      ? () => `Type constraint not satisfied: recieved ${typeOf(arg)}, expected one of ${typeOrTypes.join(', ')}`
+      : () => `Type constraint not satisfied: recieved ${typeOf(arg)}, expected ${typeOrTypes}`
+  )
 }
 
-function _satisfiesTypeConstraints(argType, typeOrTypes) {
-  if (Array.isArray(typeOrTypes)) {
-    if (!typeOrTypes.includes(argType)) {
-      throw new Error(`Argument did not meet type constraints! Is ${argType}, expected one of ${typeOrTypes.join(', ')}`)
-    }
-  } else {
-    if (argType !== typeOrTypes) {
-      throw new Error(`Argument did not meet type constraints! Is ${argType}, expected ${typeOrTypes}`)
-    }
-  }
-}
-
-function _satisfiesLengthConstraints(length, { min, max }) {
+function _satisfiesLengthConstraints(arg, { min, max }) {
+  throwIf(!isType(arg, ['string', 'array']), () => `Recieved ${typeOf(arg)}, Cannot evaluate length of types other than strings and arrays.`)
+  const length = arg.length
   if (min) {
-    _expectToBeInstanceOf(min, Number, 'Min length must be a number.')
-    if (length < min) throw new Error(`Value length does not meet minimum, recieved length ${length} expected at least ${min}`)
+    throwIf(typeof min !== 'number', 'Min length must be a number.')
+    throwIf(length < min, () => `Value length does not meet minimum, recieved length ${length} expected at least ${min}`)
   }
   if (max) {
-    _expectToBeInstanceOf(max, Number, 'Max length must be a number.')
-    if (length > max) throw new Error(`Value length exceeds maximum, recieved length ${length} expected no more than ${max}`)
+    throwIf(typeof max !== 'number', 'Max length must be a number.')
+    throwIf(length > max, () => `Value length exceeds maximum, recieved length ${length} expected no more than ${max}`)
   }
 }
 
+/**
+ * Evaluates an argument agains a set of constraints and errors if the constraint is not met,
+ * @param {*} arg - An argument to be evaluated
+ * @param {object} constraints - A schema of evaluations
+ *
+ * Constraints can declare a type or array of types for the argument to match against, and min/max lengths.
+ * Explicit type-checking implies checking for existence, as nonexistent args would be of type 'undefined'
+ */
 function satisfies(arg, constraints) {
-  _expectToBeInstanceOf(constraints, Object, 'Second argument of satisfies() must be an Object')
-  const argType = typeOf(arg)
+  throwIf(typeOf(constraints) !== 'object', 'Second argument of satisfies() must be an Object')
   if (constraints.type) {
-    _satisfiesTypeConstraints(argType, constraints.type)
+    _satisfiesTypeConstraints(arg, constraints.type)
   }
   if (constraints.length) {
-    if (!['string', 'array'].includes(argType)) throw new Error(`Recieved ${argType}, Cannot evaluate length of types other than strings and arrays.`)
-    _satisfiesLengthConstraints(arg.length, constraints.length)
+    _satisfiesLengthConstraints(arg, constraints.length)
   }
 }
 
