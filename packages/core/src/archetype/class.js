@@ -20,11 +20,12 @@ class Archetype {
   }) {
     this.name = satisfies(name, { type: 'string', length: { min: 1 } })
     this.fields = satisfies(fields, { type: 'array' })
-    this._initFeatures(satisfies(features, { type: ['object', 'array'] }))
+    this._initFeatures(features)
     this.reprs = satisfies(reprs, { type: 'object' })
   }
 
   _initFeatures(featuresOptions) {
+    satisfies(featuresOptions, { type: ['object', 'array'] })
     this.features = {}
     if (typeOf(featuresOptions) === 'array') {
       featuresOptions = _arrayToObj(featuresOptions)
@@ -41,6 +42,14 @@ class Archetype {
     _initFeature('titled', titled)
     _initFeature('completable', completable)
     _initFeature('mentionable', mentionable)
+  }
+
+  get titled() {
+    return Boolean(this.features.titled)
+  }
+
+  get completable() {
+    return Boolean(this.features.completable)
   }
 
   get mentionable() {
