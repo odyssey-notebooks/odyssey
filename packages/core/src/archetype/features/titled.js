@@ -2,6 +2,8 @@ const _titleField = (label, defaultValue) => ({
   name: '_title',
   label,
   type: 'text',
+  repr: 'plaintext',
+  newlines: false,
   defaultValue
 })
 
