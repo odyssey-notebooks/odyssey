@@ -1,12 +1,32 @@
 import { throwIf, satisfies } from '../../utils'
 
+const FIELD_REPRS = [
+  'plaintext',
+  'markdown',
+  'dropdown',
+  'checkbox',
+  'integer',
+  'integerRange',
+  'number',
+  'numberRange',
+  'currency',
+  'currencyRange',
+  'date',
+  'dateRange',
+  'rating',
+  'icon',
+  'image',
+  'gallery',
+  'imageTiles'
+]
+
 const FIELD_TYPES = [
   'text',
-  'richtext',
   'select',
   'boolean',
   'integer',
   'number',
+  'date',
   'rating',
   'icon',
   'image',
