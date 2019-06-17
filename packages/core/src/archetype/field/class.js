@@ -1,17 +1,35 @@
-import { isType } from '../../utils'
+import { throwIf, satisfies } from '../../utils'
+
+const FIELD_TYPES = [
+  'text',
+  'richtext',
+  'select',
+  'boolean',
+  'integer',
+  'number',
+  'rating',
+  'icon',
+  'image',
+  'images',
+  'reference',
+  'references',
+  'mentionables'
+]
 
 class Field {
   constructor({
-    label,
     type,
-    required = false
+    name,
+    label,
+    defaultValue,
+    ...details
   }) {
-    this.label = label
-    if (!isType(type)) {
-      throw new Error('Required argument "type" must be the string name of a known type')
-    }
+    throwIf(!FIELD_TYPES.includes(type), 'Required argument "type" must be the string name of a known type')
     this.type = type
-    this.required = required
+    this.name = satisfies(name, { type: ['string'] })
+    this.label = satisfies(label, { type: ['string'] })
+    this.defaultValue = defaultValue
+    this.details = details
   }
 }
 
