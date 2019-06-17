@@ -10,20 +10,31 @@ describe('the Archetype class constructor', () => {
     expect(() => new Archetype({})).toThrow()
     expect(() => new Archetype(goodInput)).not.toThrow()
   })
-  function newArchetype(additionalOptions) {
-    return () => new Archetype({ name: 'Foo', ...additionalOptions })
-  }
-  it('accepts option "features" as an Array or Object', () => {
-    expect(newArchetype({ features: [] })).not.toThrow()
-    expect(newArchetype({ features: {} })).not.toThrow()
-    expect(newArchetype({ features: '' })).toThrow()
-  })
-  it('accepts option "fields" as an Array', () => {
+})
+
+function newArchetype(additionalOptions) {
+  // So we don't have to type the name or boilerplate every time
+  return () => new Archetype({ name: 'Foo', ...additionalOptions })
+}
+
+describe('Archetype fields', () => {
+  it('is an Array of fields', () => {
     expect(newArchetype({ fields: [] })).not.toThrow()
     expect(newArchetype({ fields: [{ type: 'text', label: 'text' }] })).not.toThrow()
     expect(newArchetype({ fields: 'Foo' })).toThrow()
     expect(newArchetype({ fields: {} })).toThrow()
   })
+})
+
+describe('Archetype features', () => {
+  it('is an Array or Object', () => {
+    expect(newArchetype({ features: [] })).not.toThrow()
+    expect(newArchetype({ features: {} })).not.toThrow()
+    expect(newArchetype({ features: '' })).toThrow()
+  })
+})
+
+describe('Archetype reprs', () => {
   it('accepts option "reprs" as an Object', () => {
     expect(newArchetype({ reprs: {} })).not.toThrow()
     expect(newArchetype({ reprs: '' })).toThrow()
