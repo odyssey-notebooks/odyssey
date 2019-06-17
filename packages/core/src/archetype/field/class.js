@@ -1,4 +1,4 @@
-import { isType } from '../utils/types.js'
+import { isType } from '../../utils'
 
 class Field {
   constructor({
