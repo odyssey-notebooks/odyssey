@@ -1,5 +1,4 @@
 import Archetype from './class.js'
-import goodInput from './class.data.js'
 
 describe('the Archetype class constructor', () => {
   it('has an arity of 1', () => {
@@ -8,7 +7,20 @@ describe('the Archetype class constructor', () => {
   it('expects an Object argument with a key "name"', () => {
     expect(() => new Archetype()).toThrow()
     expect(() => new Archetype({})).toThrow()
-    expect(() => new Archetype(goodInput)).not.toThrow()
+    expect(() => new Archetype({ name: 'Foo' })).not.toThrow()
+  })
+})
+
+const Foo = new Archetype({ name: 'Foo' })
+
+describe('Archetype.instantiate()', () => {
+  it('is a Function of arity 1', () => {
+    expect(Foo.instantiate).toBeInstanceOf(Function)
+    expect(Foo.instantiate.length).toBe(1)
+  })
+  it('creates a record, an object', () => {
+    expect(() => Foo.instantiate()).not.toThrow()
+    expect(Foo.instantiate()).toBeInstanceOf(Object)
   })
 })
 
