@@ -1,4 +1,4 @@
-import { typeOf, satisfies } from '../utils'
+import { typeOf, satisfies, throwIf } from '../utils'
 import { titled, completable, mentionable } from './features'
 
 function _arrayToObj(arr, defaultValue) {
@@ -58,6 +58,25 @@ class Archetype {
 
   toJson() {
     return this
+  }
+
+  instantiate(options) {
+    const _archetype = this
+    const _instance = {
+      _archetype: _archetype.name
+    }
+    for (const field of _archetype.fields) {
+      let _hasDefault = field.defaultValue !== null
+      let _fieldName = field.name
+      let _valueProvided = !options.hasOwnProperty(_fieldName)
+      throwIf(!_hasDefault && !_valueProvided, `Field '${_fieldName}' has no default but no value was provided.`)
+      let _fieldValue = _valueProvided
+        ? options[_fieldName]
+        : field.defaultValue
+
+      _instance[_fieldName] = _fieldValue
+    }
+    return _instance
   }
 }
 
