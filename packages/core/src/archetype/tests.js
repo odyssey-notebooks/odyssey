@@ -34,8 +34,8 @@ function _Archetype(additionalOptions) {
   return () => new Archetype({ name: 'Foo', ...additionalOptions })
 }
 
-describe('Archetype fields', () => {
-  it('is an Array of fields', () => {
+describe('Archetype fields argument', () => {
+  it('takes an Array of fields', () => {
     expect(_Archetype({ fields: [] })).not.toThrow()
     expect(_Archetype({ fields: [{ type: 'text', label: 'text' }] })).not.toThrow()
     expect(_Archetype({ fields: 'Foo' })).toThrow()
@@ -55,6 +55,18 @@ describe('Archetype reprs', () => {
   it('accepts option "reprs" as an Object', () => {
     expect(_Archetype({ reprs: {} })).not.toThrow()
     expect(_Archetype({ reprs: '' })).toThrow()
+  })
+})
+
+describe('Archetype.isValid()', () => {
+  it('is a Function of arity 1', () => {
+    expect(Foo.isValid).toBeInstanceOf(Function)
+    expect(Foo.isValid.length).toBe(1)
+  })
+  it('determines if the input is valid instance of the archetype', () => {
+    const fooInstance = Foo.instantiate()
+    expect(Foo.isValid(fooInstance)).toBe(true)
+    expect(Foo.isValid([])).toBe(false)
   })
 })
 

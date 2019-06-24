@@ -1,4 +1,4 @@
-import { typeOf, satisfies, throwIf } from '../utils'
+import { typeOf, satisfies, throwIf, isType } from '../utils'
 import { titled, completable, mentionable } from './features'
 
 function _arrayToObj(arr, defaultValue) {
@@ -77,6 +77,16 @@ class Archetype {
       _instance[_fieldName] = _fieldValue
     }
     return _instance
+  }
+
+  isValid(instance) {
+    try {
+      throwIf(!isType(instance, 'object'), 'Instance must be an Object')
+      this.instantiate(instance)
+      return true
+    } catch (e) {
+      return false
+    }
   }
 }
 
