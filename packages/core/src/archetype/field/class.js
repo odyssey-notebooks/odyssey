@@ -41,7 +41,7 @@ class Field {
     type,
     name,
     label,
-    defaultValue,
+    defaultValue = null,
     ...details
   }) {
     throwIf(!FIELD_TYPES.includes(type), 'Required argument "type" must be the string name of a known type')
@@ -49,7 +49,9 @@ class Field {
     this.name = satisfies(name, { type: ['string'] })
     this.label = satisfies(label, { type: ['string'] })
     this.defaultValue = defaultValue
-    this.details = details
+    this.details = details === null
+      ? {}
+      : details
   }
 }
 
