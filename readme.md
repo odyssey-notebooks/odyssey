@@ -10,6 +10,8 @@ The Odyssey project has several deliverables:
 
 ## Roadmap to MVP:
 
+The goal of MVP is that Odyssey can serve as its own project management application.
+
 ### Core
 Page, View, Representation, Part - UI Types
 
