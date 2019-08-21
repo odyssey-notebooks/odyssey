@@ -10,10 +10,6 @@
 </template>
 
 <script>
-function italicsToMarkdown(text) {
-  return text.replace(/(.*)<i>(.*?)<\/i>(.*)/g, '$1*$2*$3')
-}
-
 function italicsToHtml(text) {
   return text.replace(/([^\*]*)\*([^\*]*)\*([^\*]*)/g, '$1<i>$2</i>$3')
 }
@@ -59,7 +55,7 @@ export default {
     },
     handleBlur(e) {
       this.editing = false
-      this.$emit('update:text', italicsToMarkdown(e.target.innerHTML))
+      this.$emit('update:text', e.target.innerHTML)
     },
     handleFocus(e) {
       this.editing = true
