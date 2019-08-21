@@ -1,3 +1,17 @@
 module.exports = {
-  extends: ['@commitlint/config-conventional']
+  extends: ['monorepo'],
+  rules: {
+    'scope-enum': [
+      2, 
+      'always', 
+      [
+        'repo',
+        'docs',
+        'core',
+        'components',
+        'css',
+        'app'
+      ]
+    ]
+  }
 }
