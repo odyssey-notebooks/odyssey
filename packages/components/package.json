@@ -7,14 +7,11 @@
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@vue-feathers/vue-feathers": "^0.5.1",
     "core-js": "^2.6.5",
     "highlight.js": "^9.15.6",
     "html-entities": "^1.2.1",
     "marked": "^0.7.0",
-    "quill-image-resize-module": "^1.0.0",
-    "vue": "^2.6.10",
-    "vue-quill-editor": "^3.0.6"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
