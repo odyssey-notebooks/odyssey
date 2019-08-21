@@ -11,21 +11,7 @@
 
 <script>
 import marked from 'marked'
-const Entities = require('html-entities').XmlEntities;
-const entities = new Entities();
-const { decode } = entities;
-
-function handleNewlines(text) {
-  text = text.replace(/<br>/g, '\n')
-  text = text.replace(/<div>/g, '\n')
-  text = text.replace(/```<\/?div>(.*?)<\/?div>```/g, '```\n$1\n```')
-  text = text.replace(/<\/?div>/g, '')
-  return text.replace(/\n\n\n+/g, '\n\n')
-}
-
-function handleHtml(html) {
-  return handleNewlines(decode(html))
-}
+import handleHtml from '../helpers/handleHtml.js'
 
 export default {
   props: {
@@ -52,7 +38,7 @@ export default {
         : ''
     },
     processedText() {
-      // When not editing, replace "...*...*..." with "...<i>...</i>..."
+      // When not editing, render markdown
       return !this.editing
         ? marked(this.text)
         : this.text
