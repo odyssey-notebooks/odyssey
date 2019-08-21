@@ -15,6 +15,18 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const { decode } = entities;
 
+function handleNewlines(text) {
+  text = text.replace(/<br>/g, '\n')
+  text = text.replace(/<div>/g, '\n')
+  text = text.replace(/```<\/?div>(.*?)<\/?div>```/g, '```\n$1\n```')
+  text = text.replace(/<\/?div>/g, '')
+  return text.replace(/\n\n\n+/g, '\n\n')
+}
+
+function handleHtml(html) {
+  return handleNewlines(decode(html))
+}
+
 export default {
   props: {
     h: {
@@ -54,10 +66,7 @@ export default {
       }
     },
     handleBlur(e) {
-      let text = decode(e.target.innerHTML)
-      text = text.replace(/<br>/g, '\n')
-      text = text.replace(/<\/?div>/g, '')
-      this.$emit('update:text', text)
+      this.$emit('update:text', handleHtml(e.target.innerHTML))
       this.editing = false
     },
     handleFocus(e) {
