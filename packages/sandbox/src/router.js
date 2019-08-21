@@ -26,11 +26,11 @@ export default new Router({
       }
     },
     {
-      path: '/fields/string/text-area',
+      path: '/fields/string/markdown',
       name: 'text-area-field',
-      component: () => import(/* webpackChunkName: "text-area-field" */ './views/fields/string/TextAreaFieldSandbox.vue'),
+      component: () => import(/* webpackChunkName: "markdown-field" */ './views/fields/string/MarkdownFieldSandbox.vue'),
       meta: {
-        title: "Text Area Field"
+        title: "Markdown Field"
       }
     }
   ]

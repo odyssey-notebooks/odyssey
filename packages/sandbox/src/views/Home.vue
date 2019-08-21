@@ -7,7 +7,7 @@
         <router-link class="text-base" to="/fields/string/title">Title Field</router-link>
       </li>
       <li>
-        <router-link class="text-base" to="/fields/string/text-area">Text Area Field</router-link>
+        <router-link class="text-base" to="/fields/string/markdown">Markdown Field</router-link>
       </li>
     </ul>
   </div>

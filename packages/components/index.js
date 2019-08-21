@@ -1,16 +1,16 @@
 import Checkbox from "./src/components/Checkbox.vue";
 import RichTextEditor from "./src/components/RichTextEditor.vue";
 import TitleField from "./src/fields/TitleField.vue";
-import TextAreaField from "./src/fields/TextAreaField.vue";
+import MarkdownField from "./src/fields/MarkdownField.vue";
 
 const components = {
   Checkbox,
   RichTextEditor,
   TitleField,
-  TextAreaField
+  MarkdownField
 };
 
-export { components, Checkbox, RichTextEditor, TitleField, TextAreaField };
+export { components, Checkbox, RichTextEditor, TitleField, MarkdownField };
 
 const plugin = {
   install(Vue) {
