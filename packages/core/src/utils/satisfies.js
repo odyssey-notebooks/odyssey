@@ -24,7 +24,7 @@ function _satisfiesLengthConstraints(arg, { min, max }) {
 }
 
 /**
- * Evaluates an argument agains a set of constraints and errors if the constraint is not met,
+ * Evaluates an argument agains a set of constraints; errors if the constraint is not met.
  * @param {*} arg - An argument to be evaluated
  * @param {object} constraints - A schema of evaluations
  * @returns {*} the input arg, if it didn't throw any errors

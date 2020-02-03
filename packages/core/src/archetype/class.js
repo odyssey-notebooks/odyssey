@@ -1,14 +1,6 @@
 import { typeOf, satisfies, throwIf, isType } from '../utils'
 import { titled, completable, mentionable } from './features'
 
-function _arrayToObj(arr, defaultValue) {
-  let _output = {}
-  for (const element of arr) {
-    _output[element] = defaultValue || {}
-  }
-  return _output
-}
-
 class Archetype {
   constructor({
     name,
@@ -24,24 +16,27 @@ class Archetype {
     this.reprs = satisfies(reprs, { type: 'object' })
   }
 
+  _initFeature(featureName, initializer, featuresOptions) {
+    if (featureName in featuresOptions) {
+      let { fields, options } = initializer(this.fields, featuresOptions[featureName])
+      this.features.titled = options
+      this.fields = fields
+    }
+  }
+
   _initFeatures(featuresOptions) {
     satisfies(featuresOptions, { type: ['object', 'array'] })
+    this.featuresOptions = typeOf(featuresOptions) === 'array'
+    ? featuresOptions.reduce((options, optionName) => {
+      options[optionName] = {}
+      return options
+    }, {})
+    : featuresOptions
+    
     this.features = {}
-    if (typeOf(featuresOptions) === 'array') {
-      featuresOptions = _arrayToObj(featuresOptions)
-    }
-
-    function _initFeature(featureName, initializer) {
-      if (featureName in featuresOptions) {
-        let { fields, options } = initializer(this.fields, featuresOptions[featureName])
-        this.features.titled = options
-        this.fields = fields
-      }
-    }
-
-    _initFeature('titled', titled)
-    _initFeature('completable', completable)
-    _initFeature('mentionable', mentionable)
+    this._initFeature('titled', titled)
+    this._initFeature('completable', completable)
+    this._initFeature('mentionable', mentionable)
   }
 
   get titled() {
