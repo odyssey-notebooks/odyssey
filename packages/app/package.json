@@ -16,9 +16,8 @@
     "ajv": "^6.10.0",
     "core-js": "^2.6.5",
     "highlight.js": "^9.15.6",
-    "quill-image-resize-module": "^1.0.0",
+    "tributejs": "^4.1.1",
     "vue": "^2.6.10",
-    "vue-quill-editor": "^3.0.6",
     "vuetify": "^1.5.14"
   },
   "devDependencies": {
