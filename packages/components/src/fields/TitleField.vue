@@ -1,65 +1,58 @@
 <template>
-  <component :is="htmlTag" 
-    class="font-bold" 
-    :contenteditable="editable"
-    @keydown="handleKeydown"
-    @focus="handleFocus"
-    @blur="handleBlur"
-    v-html="processedText"
-  />
+  <field class="title" :label="label" :description="description">
+    <template>
+      <text-widget
+        :value="value" 
+        :id="label" 
+        :disabled="!editable"
+        @change="text => $emit('input', text)"
+      />
+    </template>
+  </field>
 </template>
 
 <script>
-function italicsToHtml(text) {
-  return text.replace(/([^\*]*)\*([^\*]*)\*([^\*]*)/g, '$1<i>$2</i>$3')
-}
+import Field from '../fields/Field.vue'
+import TextWidget from '../widgets/TextWidget.vue'
+
+const description = `The Title field is special because it can be mentioned in markdown fields using the hashtag (#).`
 
 export default {
+  components: {
+    Field,
+    TextWidget
+  },
+  data() {
+    return {
+      description
+    }
+  },
   props: {
-    h: {
-      type: Number,
-      default: 2
-    },
-    text: {
+    value: {
       type: String,
       required: true
     },
     editable: {
       type: Boolean,
       default: false
+    },
+    labeled: {
+      type: Boolean,
+      default: true
     }
   },
-  data: () => ({
-    editing: false
-  }),
   computed: {
-    htmlTag() {
-      return 'h' + this.h  // default: h2
-    },
-    processedText() {
-      // When not editing, replace "...*...*..." with "...<i>...</i>..."
-      return !this.editing
-        ? italicsToHtml(this.text)
-        : this.text
-    }
-  },
-  methods: {
-    handleKeydown(e) {
-      const enterKey = e.key === 'Enter'
-      const forbiddenEdit = e.ctrlKey && ['u', 'b', 'i'].includes(e.key)
-      const eventShouldBeIgnored = enterKey || forbiddenEdit
-      if (eventShouldBeIgnored) {
-        e.preventDefault()
-      }
-      if (enterKey) this.$el.blur()
-    },
-    handleBlur(e) {
-      this.editing = false
-      this.$emit('update:text', e.target.innerHTML)
-    },
-    handleFocus(e) {
-      this.editing = true
+    label() {
+      return this.labeled && 'Title'
     }
   }
 }
 </script>
+
+<style scoped>
+.widget {
+  width: 100%;
+  font-family: sans-serif; 
+  font-size: 2rem;
+}
+</style>

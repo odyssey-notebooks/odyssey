@@ -1,63 +1,123 @@
 <template>
-  <div
-    :contenteditable="editable"
-    @keydown="handleKeydown"
-    @focus="handleFocus"
-    @blur="handleBlur"
-    :style="whitespace"
-    v-html="processedText"
-  />
+  <field class="markdown" :label="label">
+    <div class="view-switcher" v-if="modeEditable">
+      <button
+        :class="{
+          selected: currentMode === 'plaintext'
+        }"
+        @click="currentMode = 'plaintext'"
+      >Plain Text</button>
+      <button
+        :class="{
+          selected: currentMode === 'rendered'
+        }"
+        @click="currentMode = 'rendered'"
+      >Rendered</button>
+      <button
+        :class="{
+          selected: currentMode === 'sidebyside'
+        }"
+        @click="currentMode = 'sidebyside'"
+      >Side By Side</button>
+    </div>
+    <div class="views">
+      <text-area-widget
+        v-if="showPlaintext"
+        class="view plaintext"
+        :value="originalText"
+        :class="currentMode"
+        :editable="editable"
+        :tags="tags"
+        @input="handleUnsavedText"
+        @change="handleSavedText"
+      />
+      <markdown-pane
+        v-if="showRendered"
+        :value="renderedText"
+        :class="currentMode"
+      />
+    </div>
+  </field>
 </template>
 
 <script>
-import marked from 'marked'
-import handleHtml from '../helpers/handleHtml.js'
+import Field from './Field.vue'
+import TextAreaWidget from '../widgets/TextAreaWidget.vue'
+import MarkdownPane from '../panes/MarkdownPane.vue'
 
 export default {
+  components: {
+    Field,
+    TextAreaWidget,
+    MarkdownPane
+  },
   props: {
-    h: {
-      type: Number,
-      default: 2
-    },
-    text: {
+    value: {
       type: String,
       required: true
+    },
+    label: {
+      type: String
     },
     editable: {
       type: Boolean,
       default: false
+    },
+    tags: {
+      type: [Object, Array]
+    },
+    mode: {
+      type: String,
+      default: 'sidebyside',
+      validator(val) {
+        return ['plaintext', 'rendered', 'sidebyside'].includes(val)
+      }
+    },
+    modeEditable: {
+      type: Boolean,
+      default: true
     }
   },
-  data: () => ({
-    editing: false
-  }),
+  data() {
+    return {
+      originalText: this.value,
+      renderedText: this.value,
+      currentMode: this.mode
+    }
+  },
   computed: {
-    whitespace() {
-      return this.editing 
-        ? 'white-space: pre;'
-        : ''
+    showPlaintext() {
+      return ['plaintext', 'sidebyside'].includes(this.currentMode)
     },
-    processedText() {
-      // When not editing, render markdown
-      return !this.editing
-        ? marked(this.text)
-        : this.text
+    showRendered() {
+      return ['rendered', 'sidebyside'].includes(this.currentMode)
     }
   },
   methods: {
-    handleKeydown(e) {
-      const forbiddenEdit = e.ctrlKey && ['u', 'b', 'i'].includes(e.key)
-      if (forbiddenEdit) {
-        e.preventDefault()
-      }
+    handleUnsavedText(text) {
+      this.renderedText = text
     },
-    handleBlur(e) {
-      this.$emit('update:text', handleHtml(e.target.innerHTML))
-      this.editing = false
-    },
-    handleFocus(e) {
-      this.editing = true
+    handleSavedText(text) {
+      this.$emit('input', text)
     }
   }
 }
 </script>
+
+<style scoped>
+.views {
+  display: flex;
+  height: 50vh;
+}
+.text-area, .rendered-markdown {
+  flex: 1 1 100%;
+  overflow: auto;
+}
+.views .rendered-markdown {
+  border: 1px solid rgba(0,0,0,0.2);
+}
+.sidebyside.text-area,
+.sidebyside.rendered-markdown {
+  max-width: 50%;
+}
+</style>
