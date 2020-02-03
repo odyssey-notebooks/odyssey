@@ -32,7 +32,7 @@ export default {
 .field {
   display: flex;
   flex-direction: row;
-  align-items: start;
+  align-items: flex-start;
 }
 .label-wrapper {
   width: 25%;
