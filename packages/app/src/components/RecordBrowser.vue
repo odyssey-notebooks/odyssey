@@ -61,14 +61,27 @@ export default {
   background: rgba(0,0,0,0.1);
   border-right: 1px solid black;
 }
-
 .record-browser .items {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .record-browser .items {
   padding: 1rem;
+}
+.note {
+  border: 1px solid #bbb;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.note:first-child {
+  margin: 0 0 0.5rem 0;
+}
+.note h3 {
+  margin: 0 0 0.25rem 0;
+}
+.note p {
+  margin: 0;
 }
 </style>
 
