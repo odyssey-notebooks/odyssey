@@ -1,62 +1,58 @@
 <template>
   <div id="app">
-    <aside id="item-nav">
-      <button @click="newNote">New Note</button>
-      <hr>
-      <div class="items">
-        <!-- <pre v-for="note in notes" :key="note.id" class="note" @click="doc = note">{{ note }}</pre> -->
-        <div
-          :key="note._id"
-          v-for="note in sortedNotes"
-          class="note"
-          :class="{ selected: note._id === doc._id }"
-          @click="doc = note"
-        >
-          <h3 :key="note._id+'-heading'" v-if="note.title" v-html="note.title"/>
-          <h3 :key="note._id+'-heading'" v-else v-text="'Untitled'"/>
-          <p :key="note._id+'-description'" v-text="note.content.substring(0, 50)+'...'"/>
-        </div>
-      </div>
-    </aside>
+    <record-browser/>
     <div id="center-pane">
-      <title-field :key="doc._id+'-title'" v-if="typeof title !== 'undefined'" v-model="title" editable/>
-      <!-- <quill v-if="content" v-model="content"></quill> -->
-      <markdown-field v-model="content" :key="doc._id" label="Content" v-if="typeof content !== 'undefined'" editable :tags="tags"/>
+      <template v-if="selectedRecordId">
+        <title-field 
+          v-if="typeof title !== 'undefined'"
+          v-model="title" 
+          :key="selectedRecordId+'-title'" 
+          editable
+        />
+        <markdown-field v-model="content" :key="selectedRecordId" label="Content" v-if="typeof content !== 'undefined'" editable :tags="tags"/>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { TitleField, MarkdownField } from 'odyssey-components';
+import RecordBrowser from '@/components/RecordBrowser.vue'
 
 export default {
   name: "app",
   components: {
     TitleField,
-    MarkdownField
+    MarkdownField,
+    RecordBrowser
   },
   data: () => ({
     loggedin: false,
-    notes: [],
-    doc: {}
   }),
   computed: {
+    notes() {
+      return this.$store.state.records
+    },
+    selectedRecord() {
+      return this.$store.state.selectedRecord || {}
+    },
+    selectedRecordId() {
+      return this.selectedRecord._id
+    },
     title: {
       get() {
-        return this.doc.title
+        return this.selectedRecord.title
       },
       set(title) {
-        this.$db('notes').patch(this.doc._id, { title })
-        this.doc.title = title
+        this.$db('notes').patch(this.selectedRecordId, { title })
       }
     },
     content: {
       get() {
-        return this.doc.content
+        return this.selectedRecord.content
       },
       set(content) {
-        this.$db('notes').patch(this.doc._id, { content })
-        this.doc.content = content
+        this.$db('notes').patch(this.selectedRecordId, { content })
       }
     },
     tags() {
@@ -76,28 +72,6 @@ export default {
         },
         allowSpaces: true
       }
-    },
-    sortedNotes() {
-      return this.notes.sort((a, b) => {
-        if (a.created === b.created) return 0;
-        
-        return !(a.created < b.created)
-          ? -1
-          : 1
-      })
-    }
-  },
-  methods: {
-    newNote() {
-      this.$db('notes')
-        .create({
-          title: '', 
-          content: '',
-          created: (new Date).toISOString()
-        })
-        .then(record => {
-          this.doc = record
-        })
     }
   },
   mounted() {
@@ -118,12 +92,9 @@ export default {
             }
           })
           .subscribe(notes => {
-            this.notes = notes
+            this.$store.commit('setRecords', notes)
           })
       })
-  },
-  beforeDestroy() {
-
   }
 };
 </script>
@@ -144,33 +115,6 @@ body {
   height: 100vh;
   overflow: hidden;
   display: flex;
-}
-
-#item-nav {
-  width: 25vw;
-  display: inline-block;
-  overflow: auto;
-  background: rgba(0,0,0,0.1);
-  border-right: 1px solid black;
-}
-
-#item-nav .items, #item-nav pre {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#item-nav .items {
-  padding: 1rem;
-}
-
-#item-nav pre {
-  border: 1px solid black;
-  padding: 1rem;
-  margin: 0;
-}
-
-#item-nav pre:not(:first-child) {
-  margin-top: 1rem;
 }
 
 #center-pane {

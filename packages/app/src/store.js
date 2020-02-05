@@ -5,12 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    records: [],
+    selectedRecord: null
   },
   mutations: {
-
-  },
-  actions: {
-
+    setRecords(state, records) {
+      state.records = records
+    },
+    selectRecord(state, record) {
+      state.selectedRecord = record
+    }
   }
 })
