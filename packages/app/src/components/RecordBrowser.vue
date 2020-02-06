@@ -7,7 +7,7 @@
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
-        <span class="category">{{ category }} Records</span>
+        <span class="category">{{ category.plural }}</span>
       </button>
       <button
         @click="newRecord"
@@ -37,12 +37,11 @@
 export default {
   props: {
     category: {
-      type: String,
-      default: 'Uncategorized'
-    },
-    filter: {
-      type: Function,
-      default: () => true
+      type: Object,
+      default: () => ({
+        singular: 'Record',
+        plural: 'All Records'
+      })
     }
   },
   data() {
@@ -52,7 +51,10 @@ export default {
   },
   computed: {
     records() {
-      return this.$store.state.records
+      const records = this.$store.state.records
+      return this.category.filter
+        ? records.filter(this.category.filter)
+        : records
     },
     selectedRecordId() {
       return (this.$store.state.selectedRecord || {})._id
