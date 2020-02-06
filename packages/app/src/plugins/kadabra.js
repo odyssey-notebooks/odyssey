@@ -4,5 +4,5 @@ import kadabraClient, { feathersClient as feathers } from "@kadabra/client";
 
 const feathersClient = feathers(); // connecting to local server
 
-Vue.prototype.$db = kadabraClient({ feathers: feathersClient });
+Vue.prototype.$db = kadabraClient({ feathers: feathersClient })('notes');
 Vue.use(VueFeathers, { feathersClient });

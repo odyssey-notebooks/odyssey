@@ -29,30 +29,8 @@ export default {
     RecordBrowser,
     RecordInspector
   },
-  data: () => ({
-    loggedin: false,
-  }),
   mounted() {
-    this.$db().authenticate({ email: '1', password: '1' })
-      .then(() => {
-        console.log('db: automatically logged in');
-        this.loggedin = true;
-      })
-      .catch(e => {
-        if (e.name !== 'NotAuthenticated') console.log('db: automatic login not successful, sending to login');
-      })
-      .then(() => {
-        this.notesSubscription = this.$db('notes')
-          .watch()
-          .find({
-            query: {
-              $limit: '-1'
-            }
-          })
-          .subscribe(notes => {
-            this.$store.commit('setRecords', notes)
-          })
-      })
+    this.$store.dispatch('init')
   }
 };
 </script>

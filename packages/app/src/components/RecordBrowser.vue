@@ -1,9 +1,9 @@
 <template>
-  <div class="record-browser" :class="{ collapsed }">
+  <div class="record-browser" :class="{ collapsed: isCollapsed }">
     <div class="header">
       <button
-        @click="collapsed = !collapsed"
-        :title="collapsed ? 'Expand' : 'Collapse'" 
+        @click="isCollapsed = !isCollapsed"
+        :title="isCollapsed ? 'Expand' : 'Collapse'" 
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
@@ -17,7 +17,7 @@
         <span class="mdi mdi-plus"/>
       </button>
     </div>
-    <div class="records" v-if="!collapsed && records.length">
+    <div class="records" v-if="!isCollapsed && records.length">
       <div
         :key="record._id"
         v-for="record in sortedRecords"
@@ -25,9 +25,7 @@
         :class="{ selected: record._id === selectedRecordId }"
         @click="$store.commit('selectRecord', record)"
       >
-        <h3 :key="record._id+'-heading'" v-if="record.title" v-html="record.title"/>
-        <h3 :key="record._id+'-heading'" v-else v-text="'Untitled'"/>
-        <p :key="record._id+'-description'" v-text="record.content.substring(0, 50)+'...'"/>
+        <h3 :key="record._id+'-heading'" v-html="record.title || 'Untitled'"/>
       </div>
     </div>
   </div>
@@ -42,11 +40,15 @@ export default {
         singular: 'Record',
         plural: 'All Records'
       })
+    },
+    collapsed: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      collapsed: false
+      isCollapsed: this.collapsed
     }
   },
   computed: {
@@ -71,10 +73,15 @@ export default {
   },
   methods: {
     newRecord() {
-      this.$db('notes')
+      this.$db
         .create({
-          title: '', 
-          content: '',
+          title: '',
+          fields: {
+            content: {
+              value: '',
+              type: 'md'
+            },
+          },
           created: (new Date).toISOString()
         })
         .then(record => {

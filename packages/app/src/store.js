@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     records: [],
-    selectedRecord: null
+    selectedRecord: null,
+    loggedIn: false
   },
   getters: {
     tags(state) {
@@ -37,6 +38,32 @@ export default new Vuex.Store({
     },
     selectRecord(state, record) {
       state.selectedRecord = record
+    },
+    login(state) {
+      state.loggedIn = true
+    }
+  },
+  actions: {
+    init(context) {
+      if (context.state.records.length) return;
+      this.$db = this._vm.$db
+      this.$db
+      .authenticate({ email: '1', password: '1' })
+      .then(() => {
+        context.commit('login');
+      })
+      .then(() => {
+        this.$db
+          .watch()
+          .find({
+            query: {
+              $limit: '-1'
+            }
+          })
+          .subscribe(records => {
+            context.commit('setRecords', records)
+          })
+      })
     }
   }
 })
