@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <record-browser/>
+    <aside class="records">
+      <record-browser/>
+    </aside>
     <div id="center-pane">
       <template v-if="selectedRecordId">
         <title-field 
@@ -101,20 +103,49 @@ export default {
 
 <style>
 @import '~@csstools/normalize.css';
-
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
 }
+::-webkit-scrollbar-button{
+  display: none; 
+  height: 13px;
+  border-radius: 0px;
+  background-color: #AAA;
+}
+::-webkit-scrollbar-button:hover{
+  background-color: #AAA;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #c7c7c7; border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: #aaaaaa;
+}
+::-webkit-scrollbar-track{
+  background-color: none;
+}
+::-webkit-scrollbar-track:hover{
+  background-color: none;
+}
+::-webkit-scrollbar{
+  width: 10px;
+}
+</style>
 
+<style scoped>
 #app {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   display: flex;
+}
+
+aside.records {
+  height: 100%;
+  border-right: 1px solid rgba(0,0,0,0.6);
 }
 
 #center-pane {
@@ -141,4 +172,3 @@ body {
   margin: 0;
 }
 </style>
-

@@ -1,34 +1,64 @@
 <template>
-  <aside class="record-browser">
-    <button @click="newNote">New Note</button>
-    <hr>
-    <div class="items">
-      <div
-        :key="note._id"
-        v-for="note in sortedNotes"
-        class="note"
-        :class="{ selected: note._id === selectedRecordId }"
-        @click="$store.commit('selectRecord', note)"
+  <div class="record-browser" :class="{ collapsed }">
+    <div class="header">
+      <button
+        @click="collapsed = !collapsed"
+        :title="collapsed ? 'Expand' : 'Collapse'" 
+        class="btn expand-collapse"
       >
-        <h3 :key="note._id+'-heading'" v-if="note.title" v-html="note.title"/>
-        <h3 :key="note._id+'-heading'" v-else v-text="'Untitled'"/>
-        <p :key="note._id+'-description'" v-text="note.content.substring(0, 50)+'...'"/>
+        <span class="mdi mdi-triangle"/>
+      </button>
+      <span class="record-category">{{ category }} Records</span>
+      <button
+        @click="newRecord"
+        title="Create new record" 
+        class="btn new-record"
+      >
+        <span class="mdi mdi-plus"/>
+      </button>
+    </div>
+    <div class="records" v-if="!collapsed">
+      <div
+        :key="record._id"
+        v-for="record in sortedRecords"
+        class="note"
+        :class="{ selected: record._id === selectedRecordId }"
+        @click="$store.commit('selectRecord', record)"
+      >
+        <h3 :key="record._id+'-heading'" v-if="record.title" v-html="record.title"/>
+        <h3 :key="record._id+'-heading'" v-else v-text="'Untitled'"/>
+        <p :key="record._id+'-description'" v-text="record.content.substring(0, 50)+'...'"/>
       </div>
     </div>
-  </aside>
+  </div>
 </template>
 
 <script>
 export default {
+  props: {
+    category: {
+      type: String,
+      default: 'Uncategorized'
+    },
+    filter: {
+      type: Function,
+      default: () => true
+    }
+  },
+  data() {
+    return {
+      collapsed: false
+    }
+  },
   computed: {
-    notes() {
+    records() {
       return this.$store.state.records
     },
     selectedRecordId() {
       return (this.$store.state.selectedRecord || {})._id
     },
-    sortedNotes() {
-      return this.notes.sort((a, b) => {
+    sortedRecords() {
+      return this.records.sort((a, b) => {
         if (a.created === b.created) return 0;
         
         return !(a.created < b.created)
@@ -38,7 +68,7 @@ export default {
     }
   },
   methods: {
-    newNote() {
+    newRecord() {
       this.$db('notes')
         .create({
           title: '', 
@@ -53,20 +83,60 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .record-browser {
+  --border-width: 1px;
+  --header-height: 2rem;
   width: 25vw;
+  max-height: 100%;
   display: inline-block;
-  overflow: auto;
-  background: rgba(0,0,0,0.1);
-  border-right: 1px solid black;
-}
-.record-browser .items {
   overflow: hidden;
-  text-overflow: ellipsis;
+  background: rgba(0,0,0,0.1);
 }
-.record-browser .items {
+.record-browser .records {
+  overflow-y: auto;
+  text-overflow: ellipsis;
+  max-height: calc(100% - var(--header-height) - var(--border-width));
+}
+.record-browser .records {
   padding: 1rem;
+}
+.header {
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: rgba(0,0,0,0.6);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.expand-collapse .mdi {
+  font-size: 1rem;
+  transform: rotate(180deg);
+  transition: transform 200ms;
+}
+.record-browser.collapsed .header .expand-collapse .mdi {
+  transform: rotate(90deg);
+}
+.header .btn {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: rgba(0,0,0,0.6);
+  border: none;
+  cursor: pointer;
+  transition: color 200ms;
+}
+.header .btn:hover {
+  color: rgba(0,0,0,0.8);
+}
+.header .record-category {
+  flex: 1 1 0%;
+}
+.header .new-record {
+  font-size: 1.5rem;
 }
 .note {
   border: 1px solid #bbb;
