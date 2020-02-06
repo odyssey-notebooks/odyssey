@@ -32,6 +32,9 @@ export default new Vuex.Store({
     setRecords(state, records) {
       state.records = records
     },
+    resetSelectedRecord(state) {
+      state.selectedRecord = null
+    },
     selectRecord(state, record) {
       state.selectedRecord = record
     }
