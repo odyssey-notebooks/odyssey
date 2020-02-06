@@ -89,7 +89,7 @@ export default {
 .record-browser {
   --border-width: 1px;
   --header-height: 2rem;
-  width: 25vw;
+  width: 100%;
   max-height: 100%;
   display: inline-block;
   overflow: hidden;
@@ -118,6 +118,8 @@ export default {
 .expand-collapse .category {
   padding-left: 0.5rem;
   font-weight: bold;
+  font-size: 1rem;
+  padding-top: 2px;
 }
 .expand-collapse .mdi {
   font-size: 0.75rem;

@@ -1,81 +1,27 @@
 <template>
   <div id="app">
-    <aside class="records">
+    <aside>
       <record-browser/>
     </aside>
-    <div id="center-pane">
-      <template v-if="selectedRecordId">
-        <title-field 
-          v-if="typeof title !== 'undefined'"
-          v-model="title" 
-          :key="selectedRecordId+'-title'" 
-          editable
-        />
-        <markdown-field v-model="content" :key="selectedRecordId" label="Content" v-if="typeof content !== 'undefined'" editable :tags="tags"/>
-      </template>
-    </div>
+    <main>
+      <record-inspector/>
+    </main>
   </div>
 </template>
 
 <script>
-import { TitleField, MarkdownField } from 'odyssey-components';
 import RecordBrowser from '@/components/RecordBrowser.vue'
+import RecordInspector from '@/components/RecordInspector.vue'
 
 export default {
   name: "app",
   components: {
-    TitleField,
-    MarkdownField,
-    RecordBrowser
+    RecordBrowser,
+    RecordInspector
   },
   data: () => ({
     loggedin: false,
   }),
-  computed: {
-    notes() {
-      return this.$store.state.records
-    },
-    selectedRecord() {
-      return this.$store.state.selectedRecord || {}
-    },
-    selectedRecordId() {
-      return this.selectedRecord._id
-    },
-    title: {
-      get() {
-        return this.selectedRecord.title
-      },
-      set(title) {
-        this.$db('notes').patch(this.selectedRecordId, { title })
-      }
-    },
-    content: {
-      get() {
-        return this.selectedRecord.content
-      },
-      set(content) {
-        this.$db('notes').patch(this.selectedRecordId, { content })
-      }
-    },
-    tags() {
-      const values = this.notes
-        .filter(note => this.notes.filter(otherNote => otherNote.title === note.title).length === 1)
-      return {
-        trigger: '#',
-        values,
-        selectTemplate(item) {
-          return `<mention id="${item.original._id}" title="${item.original.title}"/>`
-        },
-        menuItemTemplate(item) {
-          return '#' + item.original.title;
-        },
-        lookup(item) {
-          return item.title
-        },
-        allowSpaces: true
-      }
-    }
-  },
   mounted() {
     this.$db().authenticate({ email: '1', password: '1' })
       .then(() => {
@@ -100,6 +46,26 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+aside {
+  width: 25%;
+  height: 100%;
+  border-right: 1px solid rgba(0,0,0,0.6);
+}
+
+main {
+  width: 75%;
+  height: 100%;
+}
+</style>
 
 <style>
 @import '~@csstools/normalize.css';
@@ -132,43 +98,5 @@ body {
 }
 ::-webkit-scrollbar{
   width: 10px;
-}
-</style>
-
-<style scoped>
-#app {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-}
-
-aside.records {
-  height: 100%;
-  border-right: 1px solid rgba(0,0,0,0.6);
-}
-
-#center-pane {
-  width: 75%;
-  display: inline-block;
-  padding: 1rem 2rem;
-  height: 100%;
-  overflow: auto;
-}
-
-.note {
-  border: 1px solid #bbb;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  cursor: pointer;
-}
-.note:first-child {
-  margin: 0 0 0.5rem 0;
-}
-.note h3 {
-  margin: 0 0 0.25rem 0;
-}
-.note p {
-  margin: 0;
 }
 </style>
