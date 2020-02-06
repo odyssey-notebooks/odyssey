@@ -130,7 +130,7 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   background: none;
   color: rgba(0,0,0,0.6);
   border: none;
