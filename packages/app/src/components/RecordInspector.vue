@@ -12,14 +12,23 @@
         :key="selectedRecordId+'-type'" 
         editable
       />
-      <markdown-field
-        v-if="typeof content !== 'undefined'" 
-        v-model="content" 
-        :tags="tags"
-        :key="selectedRecordId"
-        label="Content"
-        editable
-      />
+      <template v-for="field in fields">
+        <markdown-field
+          v-if="field.type === 'md'" 
+          :key="field.name + ' - ' + selectedRecordId"
+          :value="field.value"
+          :tags="$store.getters.tags"
+          @input="value => patchField(field.name, { value })"
+          label="Content"
+          editable
+        />
+        <input type="number" 
+          v-if="field.type === 'number'" 
+          :key="field.name + ' - ' + selectedRecordId"
+          :value="field.value"
+          @input="e => patchField(field.name, { value: Number(e.target.value) })"
+        >
+      </template>
       <hr>
       <button class="delete-btn" @click="deleteButtonClicked">Delete This Record</button>
     </template>
@@ -47,7 +56,7 @@ export default {
         return this.selectedRecord.title || ''
       },
       set(title) {
-        this.$db('notes').patch(this.selectedRecordId, { title })
+        this.$db.patch(this.selectedRecordId, { title })
       }
     },
     type: {
@@ -55,31 +64,57 @@ export default {
         return this.selectedRecord.type || ''
       },
       set(type) {
-        this.$db('notes').patch(this.selectedRecordId, { type })
+        this.$db.patch(this.selectedRecordId, { type })
       }
     },
-    content: {
-      get() {
-        return this.selectedRecord.content
-      },
-      set(content) {
-        this.$db('notes').patch(this.selectedRecordId, { content })
-      }
-    },
-    tags() {
-      return this.$store.getters.tags
+    fields() {
+      return Object.entries(this.selectedRecord.fields)
+        .map(([name, originalData]) => {
+          let data = { ...originalData }
+          if (typeof data !== 'object') {
+            data = {
+              value: data
+            }
+          }
+          if (!data.type) {
+            data.type = typeof data.value
+          }
+          data.name = name
+          return data
+        })
     }
   },
   methods: {
     deleteButtonClicked(e) {
       if (e.shiftKey || confirm('Are you sure you want to delete this record?\n\n(tip: Bypass this confirmation by holding Shift when deleting.)')) {
-        this.deleteSelectedRecord()
+        this.removeSelectedRecord()
       }
     },
-    deleteSelectedRecord() {
-      this.$db('notes').remove(this.selectedRecordId)
+    patchField(fieldName, patch) {
+      const { fields } = this.selectedRecord
+      const fieldData = fields[fieldName]
+      const newFieldData = Object.assign({ }, fieldData, patch)
+      fields[fieldName] = newFieldData
+      this.$db.patch(this.selectedRecordId, { fields })
+    },
+    removeSelectedRecord() {
+      this.$db.remove(this.selectedRecordId)
       this.$store.commit('resetSelectedRecord')
     }
+  },
+  watch: {
+    selectedRecordId(id) {
+      // Patching content
+      // if (this.selectedRecord.content && !this.selectedRecord.fields) {
+      //   let fields = {
+      //     content: {
+      //       value: this.selectedRecord.content,
+      //       type: 'md'
+      //     }
+      //   }
+      //   this.$db.patch(id, { fields }).then(record => this.$store.commit('selectRecord', record))
+      // }
+    } 
   }
 };
 </script>
