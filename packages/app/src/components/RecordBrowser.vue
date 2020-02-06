@@ -7,7 +7,7 @@
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
-        <span class="category">{{ category.plural }}</span>
+        <span class="category">{{ category.plural }} ({{ records.length }})</span>
       </button>
       <button
         @click="newRecord"
@@ -17,7 +17,7 @@
         <span class="mdi mdi-plus"/>
       </button>
     </div>
-    <div class="records" v-if="!collapsed">
+    <div class="records" v-if="!collapsed && records.length">
       <div
         :key="record._id"
         v-for="record in sortedRecords"
@@ -94,16 +94,13 @@ export default {
   display: inline-block;
   overflow: hidden;
   background: rgba(0,0,0,0.1);
+  flex: 0 1 auto;
 }
-.record-browser .records {
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  max-height: calc(100% - var(--header-height) - var(--border-width));
-}
-.record-browser .records {
-  padding: 1rem;
+.record-browser.collapsed {
+  flex: 0 0 auto;
 }
 .header {
+  border-top: 2px solid rgba(0,0,0,0.2);
   border-bottom: 1px solid rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
@@ -147,6 +144,14 @@ export default {
   width: 2rem;
   font-size: 1.5rem;
 }
+.record-browser .records {
+  overflow-y: auto;
+  text-overflow: ellipsis;
+  max-height: calc(100% - var(--header-height) - var(--border-width));
+}
+.record-browser .records {
+  padding: 0 1rem;
+}
 .note {
   border: 1px solid #bbb;
   margin: 0.5rem 0;
@@ -154,7 +159,10 @@ export default {
   cursor: pointer;
 }
 .note:first-child {
-  margin: 0 0 0.5rem 0;
+  margin: 1rem 0 0.5rem 0;
+}
+.note:last-child {
+  margin: 0 0 1rem 0;
 }
 .note h3 {
   margin: 0 0 0.25rem 0;

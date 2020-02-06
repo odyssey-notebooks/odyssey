@@ -1,7 +1,17 @@
 <template>
   <div id="app">
     <aside>
-      <record-browser/>
+      <record-browser :category="{
+        singular: 'Daily',
+        plural: 'Dailies',
+        filter: record => record.type === 'daily'
+      }"/>
+      <record-browser collapsed :category="{
+        singular: 'Uncategorized Record',
+        plural: 'Uncategorized',
+        filter: record => !record.type
+      }"/>
+      <record-browser collapsed />
     </aside>
     <main>
       <record-inspector/>
@@ -59,6 +69,8 @@ aside {
   width: 25%;
   height: 100%;
   border-right: 1px solid rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
 }
 
 main {

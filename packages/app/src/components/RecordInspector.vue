@@ -1,10 +1,15 @@
 <template>
   <div class="record-inspector">
     <template v-if="selectedRecordId">
-      <title-field 
-        v-if="typeof title !== 'undefined'"
+      <title-field
         v-model="title" 
         :key="selectedRecordId+'-title'" 
+        editable
+      />
+      <inline-text-field
+        v-model="type"
+        label="Type"
+        :key="selectedRecordId+'-type'" 
         editable
       />
       <markdown-field
@@ -22,11 +27,12 @@
 </template>
 
 <script>
-import { TitleField, MarkdownField } from 'odyssey-components';
+import { TitleField, InlineTextField, MarkdownField } from 'odyssey-components';
 
 export default {
   components: {
     TitleField,
+    InlineTextField,
     MarkdownField,
   },
   computed: {
@@ -38,10 +44,18 @@ export default {
     },
     title: {
       get() {
-        return this.selectedRecord.title
+        return this.selectedRecord.title || ''
       },
       set(title) {
         this.$db('notes').patch(this.selectedRecordId, { title })
+      }
+    },
+    type: {
+      get() {
+        return this.selectedRecord.type || ''
+      },
+      set(type) {
+        this.$db('notes').patch(this.selectedRecordId, { type })
       }
     },
     content: {
