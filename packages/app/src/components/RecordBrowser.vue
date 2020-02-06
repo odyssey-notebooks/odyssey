@@ -7,8 +7,8 @@
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
+        <span class="category">{{ category }} Records</span>
       </button>
-      <span class="record-category">{{ category }} Records</span>
       <button
         @click="newRecord"
         title="Create new record" 
@@ -108,9 +108,17 @@ export default {
   font-size: 1rem;
   color: rgba(0,0,0,0.6);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 2rem;
+}
+.expand-collapse { 
+  flex: 1 1 0%;
+}
+.expand-collapse .category {
+  padding-left: 0.5rem;
+  font-weight: bold;
 }
 .expand-collapse .mdi {
-  font-size: 1rem;
+  font-size: 0.75rem;
   transform: rotate(180deg);
   transition: transform 200ms;
 }
@@ -118,11 +126,10 @@ export default {
   transform: rotate(90deg);
 }
 .header .btn {
-  width: 2rem;
-  height: 2rem;
-  display: inline-flex;
+  height: 100%;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   background: none;
   color: rgba(0,0,0,0.6);
   border: none;
@@ -132,10 +139,8 @@ export default {
 .header .btn:hover {
   color: rgba(0,0,0,0.8);
 }
-.header .record-category {
-  flex: 1 1 0%;
-}
-.header .new-record {
+.header .new-record.btn {
+  width: 2rem;
   font-size: 1.5rem;
 }
 .note {
