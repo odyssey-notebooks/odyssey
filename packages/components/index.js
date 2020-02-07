@@ -1,6 +1,7 @@
 import Field from "./src/fields/Field.vue";
 import TitleField from "./src/fields/TitleField.vue";
 import InlineTextField from "./src/fields/InlineTextField.vue";
+import TextField from "./src/fields/TextField.vue";
 import MarkdownField from "./src/fields/MarkdownField.vue";
 
 import MarkdownPane from "./src/panes/MarkdownPane.vue";
@@ -14,21 +15,28 @@ const components = {
   Field,
   TitleField,
   InlineTextField,
+  TextField,
   MarkdownField,
+  // panes
   MarkdownPane,
   InlineMarkdownPane,
+  // widgets
   TextWidget,
   TextAreaWidget
 };
 
 export {
   components,
+  
   Field,
   TitleField,
   InlineTextField,
+  TextField,
   MarkdownField,
+  // panes  
   MarkdownPane,
   InlineMarkdownPane,
+  // widgets
   TextWidget,
   TextAreaWidget
 };
