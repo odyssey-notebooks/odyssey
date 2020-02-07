@@ -10,7 +10,7 @@
         <span class="category">{{ category.plural }} ({{ records.length }})</span>
       </button>
       <button
-        @click="newRecord"
+        @click="createNewRecord"
         title="Create new record" 
         class="btn new-record"
       >
@@ -25,13 +25,23 @@
         :class="{ selected: record._id === selectedRecordId }"
         @click="$store.commit('selectRecord', record)"
       >
-        <h3 :key="record._id+'-heading'" v-html="record.title || 'Untitled'"/>
+        <h3 :key="record._id+'-heading'" v-html="record.title || record.name || 'Untitled'"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+const DEFAULT_NEW_RECORD = {
+  title: '',
+  fields: {
+    content: {
+      value: '',
+      type: 'md'
+    },
+  }
+}
+
 export default {
   props: {
     category: {
@@ -41,7 +51,15 @@ export default {
         plural: 'All Records'
       })
     },
+    newRecord: {
+      type: Function,
+      default: defaultRecord => defaultRecord
+    },
     collapsed: {
+      type: Boolean,
+      default: false
+    },
+    archetype: {
       type: Boolean,
       default: false
     }
@@ -53,7 +71,9 @@ export default {
   },
   computed: {
     records() {
-      const records = this.$store.state.records
+      const records = this.archetype
+        ? this.$store.getters.archetypes
+        : this.$store.getters.instances
       return this.category.filter
         ? records.filter(this.category.filter)
         : records
@@ -72,16 +92,10 @@ export default {
     }
   },
   methods: {
-    newRecord() {
+    createNewRecord() {
       this.$db
         .create({
-          title: '',
-          fields: {
-            content: {
-              value: '',
-              type: 'md'
-            },
-          },
+          ...this.newRecord({ ...DEFAULT_NEW_RECORD }),
           created: (new Date).toISOString()
         })
         .then(record => {
