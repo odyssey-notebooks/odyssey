@@ -42,7 +42,7 @@ export default {
   components: {
     TitleField,
     InlineTextField,
-    MarkdownField,
+    MarkdownField
   },
   computed: {
     selectedRecord() {
@@ -119,7 +119,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .record-inspector {
   width: 100%;
   height: 100%;
