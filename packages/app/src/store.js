@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     records: [],
     selectedRecord: null,
-    loggedIn: false
+    loggedIn: false,
+    activeMenuTab: 'explorer'
   },
   getters: {
     tags(state) {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     login(state) {
       state.loggedIn = true
+    },
+    setActiveMenuTab(state, tabName) {
+      state.activeMenuTab = tabName
     }
   },
   actions: {

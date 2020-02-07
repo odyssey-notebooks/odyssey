@@ -1,18 +1,7 @@
 <template>
   <div id="app">
-    <aside>
-      <record-browser :category="{
-        singular: 'Daily',
-        plural: 'Dailies',
-        filter: record => record.type === 'daily'
-      }"/>
-      <record-browser collapsed :category="{
-        singular: 'Uncategorized Record',
-        plural: 'Uncategorized',
-        filter: record => !record.type
-      }"/>
-      <record-browser collapsed />
-    </aside>
+    <root-menu/>
+    <flex-menu/>
     <main>
       <record-inspector/>
     </main>
@@ -20,13 +9,15 @@
 </template>
 
 <script>
-import RecordBrowser from '@/components/RecordBrowser.vue'
+import RootMenu from '@/components/RootMenu.vue'
+import FlexMenu from '@/components/FlexMenu.vue'
 import RecordInspector from '@/components/RecordInspector.vue'
 
 export default {
   name: "app",
   components: {
-    RecordBrowser,
+    RootMenu,
+    FlexMenu,
     RecordInspector
   },
   mounted() {
@@ -42,17 +33,8 @@ export default {
   overflow: hidden;
   display: flex;
 }
-
-aside {
-  width: 25%;
-  height: 100%;
-  border-right: 1px solid rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-}
-
 main {
-  width: 75%;
+  flex: 1 1 100%;
   height: 100%;
 }
 </style>
