@@ -24,17 +24,6 @@
   </aside>
 </template>
 
-<script>
-export default {
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  }
-}
-</script>
-
 <style scoped>
 .root-menu {
   width: 4rem;
