@@ -3,17 +3,35 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+function resolveRecord(record, archetype) {
+  const resolvedRecord = {}
+  return record
+}
+
 export default new Vuex.Store({
   state: {
-    records: [],
+    allRecords: [],
     selectedRecord: null,
     loggedIn: false,
     activeMenuTab: 'explorer'
   },
   getters: {
+    archetypes(state) {
+      return state.allRecords.filter(record => record.archetype)
+    },
+    archetypeOf: (_state, getters) => instance => resolveRecord(
+      instance, 
+      getters
+      .archetypes
+      .find(arch => arch._id === instance.__meta__.archetype)
+    ),
+    resolved: (_state, getters) => record => resolveRecord(record, getters.archetypeOf(record)),
+    instances(state) {
+      return state.allRecords.filter(record => !record.archetype)
+    },
     tags(state) {
-      const values = state.records
-        .filter(note => state.records.filter(otherNote => otherNote.title === note.title).length === 1)
+      const values = state.allRecords
+        .filter(note => state.allRecords.filter(otherNote => otherNote.title === note.title).length === 1)
       return {
         trigger: '#',
         values,
@@ -32,7 +50,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setRecords(state, records) {
-      state.records = records
+      state.allRecords = records
     },
     resetSelectedRecord(state) {
       state.selectedRecord = null
@@ -49,7 +67,7 @@ export default new Vuex.Store({
   },
   actions: {
     init(context) {
-      if (context.state.records.length) return;
+      if (context.state.allRecords.length) return;
       this.$db = this._vm.$db
       this.$db
       .authenticate({ email: '1', password: '1' })

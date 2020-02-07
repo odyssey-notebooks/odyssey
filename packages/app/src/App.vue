@@ -3,7 +3,10 @@
     <root-menu/>
     <flex-menu/>
     <main>
-      <record-inspector/>
+      <template v-if="$store.state.selectedRecord">
+        <archetype-inspector v-if="$store.state.selectedRecord.archetype"/>
+        <record-inspector v-else/>
+      </template>
     </main>
   </div>
 </template>
@@ -12,13 +15,15 @@
 import RootMenu from '@/components/RootMenu.vue'
 import FlexMenu from '@/components/FlexMenu.vue'
 import RecordInspector from '@/components/RecordInspector.vue'
+import ArchetypeInspector from '@/components/ArchetypeInspector.vue'
 
 export default {
   name: "app",
   components: {
     RootMenu,
     FlexMenu,
-    RecordInspector
+    RecordInspector,
+    ArchetypeInspector
   },
   mounted() {
     this.$store.dispatch('init')

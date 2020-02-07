@@ -16,7 +16,7 @@
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'types'">
-      <flex-menu-tile label="New Data Type" icon="plus-thick"/>
+      <record-browser archetype :newRecord="defaultRecord => ({ archetype: true, name: '', definition: defaultRecord })" />
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'settings'">
