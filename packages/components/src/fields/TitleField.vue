@@ -15,7 +15,7 @@
 
 <script>
 import Field from '../fields/Field.vue'
-import TextWidget from '../widgets/TextWidget.vue'
+import TextWidget from '../widgets/InlineTextWidget.vue'
 
 const description = `Mention titles in text using using #hashtags.`
 

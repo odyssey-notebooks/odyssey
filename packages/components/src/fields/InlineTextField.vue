@@ -4,7 +4,7 @@
     :label="labeled && label" 
     :description="description"
   >
-    <text-widget
+    <inline-text-widget
       :value="value" 
       :id="label" 
       :disabled="!editable"
@@ -15,12 +15,12 @@
 
 <script>
 import Field from '../fields/Field.vue'
-import TextWidget from '../widgets/TextWidget.vue'
+import InlineTextWidget from '../widgets/InlineTextWidget.vue'
 
 export default {
   components: {
     Field,
-    TextWidget
+    InlineTextWidget
   },
   props: {
     value: {

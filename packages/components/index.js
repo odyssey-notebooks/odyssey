@@ -7,7 +7,7 @@ import MarkdownField from "./src/fields/MarkdownField.vue";
 import MarkdownPane from "./src/panes/MarkdownPane.vue";
 import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
 
-import TextWidget from "./src/widgets/TextWidget.vue";
+import InlineTextWidget from "./src/widgets/InlineTextWidget.vue";
 import TextAreaWidget from "./src/widgets/TextAreaWidget.vue";
 
 
@@ -21,7 +21,7 @@ const components = {
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
-  TextWidget,
+  InlineTextWidget,
   TextAreaWidget
 };
 
@@ -37,7 +37,7 @@ export {
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
-  TextWidget,
+  InlineTextWidget,
   TextAreaWidget
 };
 
