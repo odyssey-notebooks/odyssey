@@ -1,6 +1,6 @@
 <template>
   <field 
-    class="inline-text" 
+    class="dropdown" 
     :label="labeled && label" 
     :description="description"
   >
