@@ -1,5 +1,6 @@
 <template>
   <div class="archetype-inspector">
+    <h4 style="font-family:sans-serif;">ID: {{ archetypeId }}</h4>
     <inline-text-field
       v-model="name" 
       :key="archetypeId+'-name'" 
