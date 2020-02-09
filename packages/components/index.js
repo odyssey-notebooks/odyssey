@@ -4,12 +4,14 @@ import InlineTextField from "./src/fields/InlineTextField.vue";
 import TextField from "./src/fields/TextField.vue";
 import JsonField from "./src/fields/JsonField.vue";
 import MarkdownField from "./src/fields/MarkdownField.vue";
+import DropdownField from "./src/fields/DropdownField.vue";
 
 import MarkdownPane from "./src/panes/MarkdownPane.vue";
 import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
 
 import InlineTextWidget from "./src/widgets/InlineTextWidget.vue";
 import TextAreaWidget from "./src/widgets/TextAreaWidget.vue";
+import DropdownWidget from "./src/widgets/TextAreaWidget.vue";
 
 
 const components = {
@@ -19,12 +21,14 @@ const components = {
   TextField,
   JsonField,
   MarkdownField,
+  DropdownField,
   // panes
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
   InlineTextWidget,
-  TextAreaWidget
+  TextAreaWidget,
+  DropdownWidget
 };
 
 export {
@@ -36,12 +40,14 @@ export {
   TextField,
   JsonField,
   MarkdownField,
+  DropdownField,
   // panes  
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
   InlineTextWidget,
-  TextAreaWidget
+  TextAreaWidget,
+  DropdownWidget
 };
 
 const plugin = {
