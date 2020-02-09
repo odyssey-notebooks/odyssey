@@ -52,6 +52,15 @@
               @input="value => patchField(field.key, value)"
               editable
             />
+            <checkbox-field
+              v-else-if="field.type === 'checkbox'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value"
+              :tags="$store.getters.tags"
+              :label="field.label"
+              @input="value => patchField(field.key, value )"
+              editable
+            />
           </template>
         </template>
         <template v-else-if="currentView === 'json'">
@@ -70,7 +79,14 @@
 </template>
 
 <script>
-import { TitleField, InlineTextField, MarkdownField, JsonField, DropdownField } from 'odyssey-components';
+import { 
+  TitleField,
+  InlineTextField,
+  MarkdownField,
+  JsonField,
+  DropdownField,
+  CheckboxField
+} from 'odyssey-components';
 import { resolvedRecordToString } from 'odyssey-core';
 
 export default {
@@ -79,7 +95,8 @@ export default {
     InlineTextField,
     MarkdownField,
     JsonField,
-    DropdownField
+    DropdownField,
+    CheckboxField
   },
   data() {
     return {
@@ -121,7 +138,6 @@ export default {
       }
     },
     patchField(fieldName, patchedData) {
-      console.log('Patching', fieldName, patchedData)
       this.$db.patch(this.selectedRecordId, { [fieldName]: patchedData })
     },
     removeSelectedRecord() {
