@@ -25,14 +25,14 @@
         :class="{ selected: record._id === selectedRecordId }"
         @click="$store.commit('selectRecord', record)"
       >
-        <h3 :key="record._id+'-heading'" v-html="record.title || record.name || 'Untitled'"/>
+        <h3 :key="record._id+'-heading'" v-text="resolvedRecordToString($store.getters.resolved(record)) || 'Untitled'"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { generateRecord } from 'odyssey-core'
+import { generateRecord, resolvedRecordToString } from 'odyssey-core'
 
 export default {
   props: {
@@ -47,7 +47,8 @@ export default {
   },
   data() {
     return {
-      isCollapsed: this.collapsed
+      isCollapsed: this.collapsed,
+      resolvedRecordToString
     }
   },
   computed: {
