@@ -1,11 +1,8 @@
+import generateMeta from './generateMeta'
+
 export default function generateRecord(archetype, data = {}) {
-  const created = (new Date).toISOString()
   const record = {
-    __meta__: {
-      archetype: archetype.name,
-      created,
-      updated: created
-    }
+    __meta__: generateMeta(archetype)
   }
   for (const field of archetype.fields) {
     const value = data[field.key] !== undefined
