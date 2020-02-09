@@ -35,7 +35,7 @@ export default {
   align-items: flex-start;
 }
 .label-wrapper {
-  width: 25%;
+  width: 150px;
   height: 100%;
 }
 .field .widget-wrapper {
