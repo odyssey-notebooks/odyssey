@@ -3,7 +3,7 @@
       
     <template v-if="$store.state.activeMenuTab === 'explorer'">
       <record-browser
-        v-for="archetype in $store.getters.archetypes"
+        v-for="archetype in $store.getters.archetypes.sort((a, b) => a.name > b.name ? 1 : -1)"
         :archetype="archetype"
         :key="archetype.name"
       />
