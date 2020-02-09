@@ -1,31 +1,54 @@
 <template>
   <div class="record-inspector">
     <template v-if="selectedRecordId">
-      <template v-for="field in fields">
-        <inline-text-field
-          v-if="field.type === 'inline-text'" 
-          :key="field.key + ' - ' + selectedRecordId" 
-          :value="field.value"
-          :label="field.label"
-          @input="value => patchField(field.key, value )"
-          editable
-        />
-        <markdown-field
-          v-else-if="field.type === 'markdown'" 
-          :key="field.key + ' - ' + selectedRecordId"
-          :value="field.value"
-          :tags="$store.getters.tags"
-          @input="value => patchField(field.key, value )"
-          label="Content"
-          editable
-        />
-        <input type="number" 
-          v-else-if="field.type === 'number'" 
-          :key="field.key + ' - ' + selectedRecordId"
-          :value="field.value"
-          @input="e => patchField(field.key, Number(e.target.value))"
-        >
-      </template>
+      <div class="current-view">       
+        <div class="view-switcher">
+          <div class="view-switcher-option"
+            :class="{ active: currentView === 'fields' }"
+            @click="currentView = 'fields'"
+          ><span class="mdi mdi-table"/></div>
+          <div class="view-switcher-option"
+            :class="{ active: currentView === 'json' }"
+            @click="currentView = 'json'"
+          ><span class="mdi mdi-json"/></div>
+        </div>  
+        <template v-if="currentView === 'fields'">
+          <h4 style="font-family:sans-serif;">ID: {{ selectedRecordId }}</h4>
+          <template v-for="field in fields">
+            <inline-text-field
+              v-if="field.type === 'inline-text'" 
+              :key="field.key + ' - ' + selectedRecordId" 
+              :value="field.value"
+              :label="field.label"
+              @input="value => patchField(field.key, value )"
+              editable
+            />
+            <markdown-field
+              v-else-if="field.type === 'markdown'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value"
+              :tags="$store.getters.tags"
+              :label="field.label"
+              @input="value => patchField(field.key, value )"
+              editable
+            />
+            <input type="number" 
+              v-else-if="field.type === 'number'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value"
+              @input="e => patchField(field.key, Number(e.target.value))"
+            >
+          </template>
+        </template>
+        <template v-else-if="currentView === 'json'">
+          <json-field
+            v-model="recordJson" 
+            :key="selectedRecordId+'-definition'" 
+            editable
+            label="Raw JSON"
+          />
+        </template>
+      </div>
       <hr>
       <button class="delete-btn" @click="deleteButtonClicked">Delete This Record</button>
     </template>
@@ -33,23 +56,44 @@
 </template>
 
 <script>
-import { TitleField, InlineTextField, MarkdownField } from 'odyssey-components';
+import { TitleField, InlineTextField, MarkdownField, JsonField } from 'odyssey-components';
 
 export default {
   components: {
     TitleField,
     InlineTextField,
-    MarkdownField
+    MarkdownField,
+    JsonField
+  },
+  data() {
+    return {
+      currentView: 'fields'
+    }
   },
   computed: {
     record() {
-      return this.$store.getters.selectedRecordResolved || {}
+      return this.$store.getters.liveRecord
+    },
+    recordJson: {
+      get() {
+        const { _id, ...safeRecord} = this.record
+        return JSON.stringify(safeRecord || '')
+      },
+      set(val) {
+        const currentRecord = this.record
+        const newRecord = JSON.parse(val)
+        if (newRecord._id) {
+          throw new Error("top-level key '_id' is reserved")
+          return
+        }
+        this.$db.update(this.selectedRecordId, newRecord)
+      }
     },
     selectedRecordId() {
       return this.record._id
     },
     fields() {
-      const { __meta__, _id, ...fields } = this.record
+      const { __meta__, _id, ...fields } = this.$store.getters.selectedRecordResolved || {}
       return Object.values(fields)
     }
   },
@@ -76,6 +120,31 @@ export default {
   height: 100%;
   padding: 1rem 2rem;
   overflow: auto;
+}
+.current-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.view-switcher {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+}
+.view-switcher-option {
+  font-size: 2rem;
+  padding: 0.25rem;
+  opacity: 0.4;
+  transition: opacity 250ms;
+  cursor: pointer;
+}
+.view-switcher-option:hover {
+  opacity: 0.6;  
+}
+.view-switcher-option.active {
+  opacity: 0.8;
 }
 hr {
   margin: 4rem 0;
