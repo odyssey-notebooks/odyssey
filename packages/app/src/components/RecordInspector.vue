@@ -38,6 +38,20 @@
               :value="field.value"
               @input="e => patchField(field.key, Number(e.target.value))"
             >
+            <dropdown-field 
+              v-else-if="field.type === 'reference'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value"
+              :label="$store.getters.archetypes.find(arch => arch._id === field.archetype).name"
+              :options="$store.getters.instances
+                .filter(inst => inst.__meta__.archetype === field.archetype)
+                .map(record => ({
+                  id: record._id,
+                  text: resolvedRecordToString($store.getters.resolved(record)) || '(no text provided)'
+                }))"
+              @input="value => patchField(field.key, value)"
+              editable
+            />
           </template>
         </template>
         <template v-else-if="currentView === 'json'">
@@ -56,18 +70,21 @@
 </template>
 
 <script>
-import { TitleField, InlineTextField, MarkdownField, JsonField } from 'odyssey-components';
+import { TitleField, InlineTextField, MarkdownField, JsonField, DropdownField } from 'odyssey-components';
+import { resolvedRecordToString } from 'odyssey-core';
 
 export default {
   components: {
     TitleField,
     InlineTextField,
     MarkdownField,
-    JsonField
+    JsonField,
+    DropdownField
   },
   data() {
     return {
-      currentView: 'fields'
+      currentView: 'fields',
+      resolvedRecordToString
     }
   },
   computed: {
@@ -104,6 +121,7 @@ export default {
       }
     },
     patchField(fieldName, patchedData) {
+      console.log('Patching', fieldName, patchedData)
       this.$db.patch(this.selectedRecordId, { [fieldName]: patchedData })
     },
     removeSelectedRecord() {
