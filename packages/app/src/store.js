@@ -12,6 +12,11 @@ export default new Vuex.Store({
     activeMenuTab: 'explorer'
   },
   getters: {
+    liveRecord(state) {
+      return state.selectedRecord
+        ? state.allRecords.find(record => record._id === state.selectedRecord._id)
+        : {}
+    },
     archetypes(state) {
       return state.allRecords.filter(record => record.archetype)
     },
@@ -81,6 +86,19 @@ export default new Vuex.Store({
             context.commit('setRecords', records)
           })
       })
+    },
+    updateRecord(id, newRecord) {
+      newRecord.__meta__.updated = (new Date).toISOString()
+      this.$db.update(id, newRecord)
+    },
+    patchRecord(id, patch) {
+      const updatedPatch = {
+        __meta__: {
+          updated: (new Date).toISOString()
+        },
+        ...patch
+      }
+      this.$db.patch(id, updatedPatch)
     }
   }
 })
