@@ -142,28 +142,34 @@ export default {
 .record-browser .records {
   overflow-y: auto;
   text-overflow: ellipsis;
-  max-height: calc(100% - var(--header-height) - var(--border-width));
+  max-height: calc(100% - var(--header-height));
 }
 .record-browser .records {
   padding: 0 1rem;
 }
 .note {
-  border: 1px solid #bbb;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  /* border: 1px solid #bbb; */
+  margin: 0 -1rem;
+  padding: 0.25rem 1rem;
   cursor: pointer;
 }
+.note:hover {
+  background: rgba(0,0,0,0.1);
+}
 .note:first-child {
-  margin: 1rem 0 0.5rem 0;
+  padding: 0 1rem 0.5rem;
 }
 .note:last-child {
-  margin: 0 0 1rem 0;
+  padding: 0.5rem 1rem 0;
+}
+.note:first-child:last-child {
+  padding: 0.5rem 1rem;
 }
 .note h3 {
-  margin: 0 0 0.25rem 0;
-}
-.note p {
-  margin: 0;
+  margin: 0 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
 
