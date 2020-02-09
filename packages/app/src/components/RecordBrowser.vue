@@ -33,12 +33,17 @@
 
 <script>
 const DEFAULT_NEW_RECORD = {
+  __meta__: {
+    archetype: '',
+    created: '',
+    updated: '',
+    // fieldOrder: ['title', 'content']
+    // toString: '{{ primaryField.value || title || name || `${archetype.name} updated ` }}'
+  },
   title: '',
-  fields: {
-    content: {
-      value: '',
-      type: 'md'
-    },
+  content: {
+    value: '',
+    type: 'md'
   }
 }
 
@@ -83,9 +88,9 @@ export default {
     },
     sortedRecords() {
       return this.records.sort((a, b) => {
-        if (a.created === b.created) return 0;
+        if (a.__meta__.created === b.__meta__.created) return 0;
         
-        return !(a.created < b.created)
+        return !(a.__meta__.created < b.__meta__.created)
           ? -1
           : 1
       })
@@ -93,10 +98,15 @@ export default {
   },
   methods: {
     createNewRecord() {
+      const created = (new Date).toISOString()
       this.$db
         .create({
           ...this.newRecord({ ...DEFAULT_NEW_RECORD }),
-          created: (new Date).toISOString()
+          __meta__: {
+            archetype: '',
+            created,
+            updated: created
+          }
         })
         .then(record => {
           this.$store.commit('selectRecord', record)

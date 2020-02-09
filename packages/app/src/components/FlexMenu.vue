@@ -2,21 +2,11 @@
   <aside class="flex-menu">
       
     <template v-if="$store.state.activeMenuTab === 'explorer'">
-      <record-browser :category="{
-        singular: 'Daily',
-        plural: 'Dailies',
-        filter: record => record.type === 'daily'
-      }"/>
-      <record-browser collapsed :category="{
-        singular: 'Uncategorized Record',
-        plural: 'Uncategorized',
-        filter: record => !record.type
-      }"/>
-      <record-browser collapsed />
+      <record-browser key="explorer" />
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'types'">
-      <record-browser archetype :newRecord="defaultRecord => ({ archetype: true, name: '', definition: defaultRecord })" />
+      <record-browser key="types" archetype :newRecord="defaultRecord => ({ archetype: true, name: '', definition: defaultRecord })" />
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'settings'">

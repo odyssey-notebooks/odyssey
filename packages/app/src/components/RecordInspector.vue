@@ -1,32 +1,29 @@
 <template>
   <div class="record-inspector">
     <template v-if="selectedRecordId">
-      <title-field
-        v-model="title" 
-        :key="selectedRecordId+'-title'" 
-        editable
-      />
-      <inline-text-field
-        v-model="type"
-        label="Type"
-        :key="selectedRecordId+'-type'" 
-        editable
-      />
       <template v-for="field in fields">
+        <inline-text-field
+          v-if="field.type === 'inline-text'" 
+          :key="field.key + ' - ' + selectedRecordId" 
+          :value="field.value"
+          :label="field.label"
+          @input="value => patchField(field.key, value )"
+          editable
+        />
         <markdown-field
-          v-if="field.type === 'md'" 
-          :key="field.name + ' - ' + selectedRecordId"
+          v-else-if="field.type === 'markdown'" 
+          :key="field.key + ' - ' + selectedRecordId"
           :value="field.value"
           :tags="$store.getters.tags"
-          @input="value => patchField(field.name, { value })"
+          @input="value => patchField(field.key, value )"
           label="Content"
           editable
         />
         <input type="number" 
-          v-if="field.type === 'number'" 
-          :key="field.name + ' - ' + selectedRecordId"
+          v-else-if="field.type === 'number'" 
+          :key="field.key + ' - ' + selectedRecordId"
           :value="field.value"
-          @input="e => patchField(field.name, { value: Number(e.target.value) })"
+          @input="e => patchField(field.key, Number(e.target.value))"
         >
       </template>
       <hr>
@@ -45,43 +42,15 @@ export default {
     MarkdownField
   },
   computed: {
-    selectedRecord() {
-      return this.$store.state.selectedRecord || {}
+    record() {
+      return this.$store.getters.selectedRecordResolved || {}
     },
     selectedRecordId() {
-      return this.selectedRecord._id
-    },
-    title: {
-      get() {
-        return this.selectedRecord.title || ''
-      },
-      set(title) {
-        this.$db.patch(this.selectedRecordId, { title })
-      }
-    },
-    type: {
-      get() {
-        return this.selectedRecord.type || ''
-      },
-      set(type) {
-        this.$db.patch(this.selectedRecordId, { type })
-      }
+      return this.record._id
     },
     fields() {
-      return Object.entries(this.selectedRecord.fields)
-        .map(([name, originalData]) => {
-          let data = { ...originalData }
-          if (typeof data !== 'object') {
-            data = {
-              value: data
-            }
-          }
-          if (!data.type) {
-            data.type = typeof data.value
-          }
-          data.name = name
-          return data
-        })
+      const { __meta__, _id, ...fields } = this.record
+      return Object.values(fields)
     }
   },
   methods: {
@@ -90,31 +59,13 @@ export default {
         this.removeSelectedRecord()
       }
     },
-    patchField(fieldName, patch) {
-      const { fields } = this.selectedRecord
-      const fieldData = fields[fieldName]
-      const newFieldData = Object.assign({ }, fieldData, patch)
-      fields[fieldName] = newFieldData
-      this.$db.patch(this.selectedRecordId, { fields })
+    patchField(fieldName, patchedData) {
+      this.$db.patch(this.selectedRecordId, { [fieldName]: patchedData })
     },
     removeSelectedRecord() {
       this.$db.remove(this.selectedRecordId)
       this.$store.commit('resetSelectedRecord')
     }
-  },
-  watch: {
-    selectedRecordId(id) {
-      // Patching content
-      // if (this.selectedRecord.content && !this.selectedRecord.fields) {
-      //   let fields = {
-      //     content: {
-      //       value: this.selectedRecord.content,
-      //       type: 'md'
-      //     }
-      //   }
-      //   this.$db.patch(id, { fields }).then(record => this.$store.commit('selectRecord', record))
-      // }
-    } 
   }
 };
 </script>
