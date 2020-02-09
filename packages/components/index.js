@@ -5,6 +5,7 @@ import TextField from "./src/fields/TextField.vue";
 import JsonField from "./src/fields/JsonField.vue";
 import MarkdownField from "./src/fields/MarkdownField.vue";
 import DropdownField from "./src/fields/DropdownField.vue";
+import CheckboxField from "./src/fields/CheckboxField.vue";
 
 import MarkdownPane from "./src/panes/MarkdownPane.vue";
 import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
@@ -12,6 +13,7 @@ import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
 import InlineTextWidget from "./src/widgets/InlineTextWidget.vue";
 import TextAreaWidget from "./src/widgets/TextAreaWidget.vue";
 import DropdownWidget from "./src/widgets/DropdownWidget.vue";
+import CheckboxWidget from "./src/widgets/CheckboxWidget.vue";
 
 
 const components = {
@@ -22,13 +24,15 @@ const components = {
   JsonField,
   MarkdownField,
   DropdownField,
+  CheckboxField,
   // panes
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
   InlineTextWidget,
   TextAreaWidget,
-  DropdownWidget
+  DropdownWidget,
+  CheckboxWidget
 };
 
 export {
@@ -41,13 +45,15 @@ export {
   JsonField,
   MarkdownField,
   DropdownField,
+  CheckboxField,
   // panes  
   MarkdownPane,
   InlineMarkdownPane,
   // widgets
   InlineTextWidget,
   TextAreaWidget,
-  DropdownWidget
+  DropdownWidget,
+  CheckboxWidget
 };
 
 const plugin = {
