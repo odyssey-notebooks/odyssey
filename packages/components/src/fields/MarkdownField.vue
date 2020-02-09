@@ -108,6 +108,7 @@ export default {
 .views {
   display: flex;
   height: 50vh;
+  margin-bottom: 2rem;
 }
 .text-area, .rendered-markdown {
   flex: 1 1 100%;
