@@ -11,7 +11,7 @@ import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
 
 import InlineTextWidget from "./src/widgets/InlineTextWidget.vue";
 import TextAreaWidget from "./src/widgets/TextAreaWidget.vue";
-import DropdownWidget from "./src/widgets/TextAreaWidget.vue";
+import DropdownWidget from "./src/widgets/DropdownWidget.vue";
 
 
 const components = {
