@@ -1,7 +1,7 @@
 <template>
   <select
     class="widget dropdown"
-    @change="onChange"
+    @change="$emit('change', $el.value || null)"
     :value="value"
   >
     <option
@@ -30,12 +30,6 @@ export default {
     options: {
       type: Array,
       required: true
-    }
-  },
-  methods: {
-    onChange(e) {
-      console.log('change emitted')
-      this.$emit('change', this.$el.value || null)
     }
   }
 }
