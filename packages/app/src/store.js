@@ -4,8 +4,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 function resolveRecord(record, archetype) {
-  const resolvedRecord = {}
-  return record
+  const resolvedRecord = {
+    _id: record._id,
+    __meta__: record.__meta__
+  }
+  for (const field of archetype.fields) {
+    resolvedRecord[field.key] = {
+      ...field,
+      value: record[field.key] === undefined
+        ? field.default
+        : record[field.key]
+    }
+  }
+  return resolvedRecord
 }
 
 export default new Vuex.Store({
@@ -19,13 +30,12 @@ export default new Vuex.Store({
     archetypes(state) {
       return state.allRecords.filter(record => record.archetype)
     },
-    archetypeOf: (_state, getters) => instance => resolveRecord(
-      instance, 
-      getters
-      .archetypes
-      .find(arch => arch._id === instance.__meta__.archetype)
-    ),
-    resolved: (_state, getters) => record => resolveRecord(record, getters.archetypeOf(record)),
+    archetypeOf: (_state, getters) => instance => instance 
+      && getters.archetypes.find(arch => arch.name === instance.__meta__.archetype)
+    ,
+    selectedRecordArchetype: (state, getters) => getters.archetypeOf(state.selectedRecord),
+    resolved: (_state, getters) => record => record && resolveRecord(record, getters.archetypeOf(record)),
+    selectedRecordResolved: (state, getters) => getters.resolved(state.selectedRecord),
     instances(state) {
       return state.allRecords.filter(record => !record.archetype)
     },
