@@ -6,11 +6,11 @@
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'types'">
-      <record-browser key="types" archetype :newRecord="defaultRecord => ({ archetype: true, name: '', definition: defaultRecord })" />
+      <record-browser key="types" archetype />
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'settings'">
-      <flex-menu-tile label="Database" icon="database"/>
+      <flex-menu-tile label="Database" icon="database" />
     </template>
   
   </aside>

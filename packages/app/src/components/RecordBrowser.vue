@@ -7,7 +7,7 @@
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
-        <span class="category">{{ category.plural }} ({{ records.length }})</span>
+        <span class="category">Records ({{ records.length }})</span>
       </button>
       <button
         @click="createNewRecord"
@@ -32,34 +32,10 @@
 </template>
 
 <script>
-const DEFAULT_NEW_RECORD = {
-  __meta__: {
-    archetype: '',
-    created: '',
-    updated: '',
-    // fieldOrder: ['title', 'content']
-    // toString: '{{ primaryField.value || title || name || `${archetype.name} updated ` }}'
-  },
-  title: '',
-  content: {
-    value: '',
-    type: 'md'
-  }
-}
+import { generateRecord } from 'odyssey-core'
 
 export default {
   props: {
-    category: {
-      type: Object,
-      default: () => ({
-        singular: 'Record',
-        plural: 'All Records'
-      })
-    },
-    newRecord: {
-      type: Function,
-      default: defaultRecord => defaultRecord
-    },
     collapsed: {
       type: Boolean,
       default: false
@@ -76,12 +52,9 @@ export default {
   },
   computed: {
     records() {
-      const records = this.archetype
+      return this.archetype
         ? this.$store.getters.archetypes
         : this.$store.getters.instances
-      return this.category.filter
-        ? records.filter(this.category.filter)
-        : records
     },
     selectedRecordId() {
       return (this.$store.state.selectedRecord || {})._id
@@ -98,16 +71,9 @@ export default {
   },
   methods: {
     createNewRecord() {
-      const created = (new Date).toISOString()
+      const Note = this.$store.getters.archetypes.find(arch => arch.name === 'Note')
       this.$db
-        .create({
-          ...this.newRecord({ ...DEFAULT_NEW_RECORD }),
-          __meta__: {
-            archetype: '',
-            created,
-            updated: created
-          }
-        })
+        .create(generateRecord(Note))
         .then(record => {
           this.$store.commit('selectRecord', record)
         })
