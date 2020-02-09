@@ -16,7 +16,6 @@ export default new Vuex.Store({
       const liveRecord = state.selectedRecord
         ? state.allRecords.find(record => record._id === state.selectedRecord._id)
         : {}
-      console.log(liveRecord)
       return liveRecord
     },
     archetypes(state) {
