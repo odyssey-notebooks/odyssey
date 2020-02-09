@@ -25,14 +25,14 @@
         :class="{ selected: archetype._id === selectedArchetypeId }"
         @click="$store.commit('selectRecord', archetype)"
       >
-        <h3 :key="archetype._id+'-heading'" v-html="archetype.title || archetype.name || 'Untitled'"/>
+        <h3 :key="archetype._id+'-heading'" v-html="archetype.name"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { generateRecord } from 'odyssey-core'
+import { generateArchetype } from 'odyssey-core'
 
 export default {
   props: {
@@ -66,10 +66,10 @@ export default {
   methods: {
     createNewArchetype() {
       this.$db
-        // .create(generateArchetype(''))
-        // .then(record => {
-        //   this.$store.commit('selectRecord', record)
-        // })
+        .create(generateArchetype('New Data Type'))
+        .then(record => {
+          this.$store.commit('selectRecord', record)
+        })
     }
   },
 };

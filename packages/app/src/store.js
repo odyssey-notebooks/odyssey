@@ -16,7 +16,7 @@ export default new Vuex.Store({
       return state.allRecords.filter(record => record.archetype)
     },
     archetypeOf: (_state, getters) => instance => instance 
-      && getters.archetypes.find(arch => arch.name === instance.__meta__.archetype)
+      && getters.archetypes.find(arch => arch._id === instance.__meta__.archetype)
     ,
     selectedRecordArchetype: (state, getters) => getters.archetypeOf(state.selectedRecord),
     resolved: (_state, getters) => record => record && resolveRecord(record, getters.archetypeOf(record)),

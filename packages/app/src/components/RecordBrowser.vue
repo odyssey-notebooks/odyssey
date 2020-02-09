@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     records() {
-      return this.$store.getters.instances.filter(record => record.__meta__.archetype === this.archetype.name)
+      return this.$store.getters.instances.filter(record => record.__meta__.archetype === this.archetype._id)
     },
     selectedRecordId() {
       return (this.$store.state.selectedRecord || {})._id
@@ -69,9 +69,8 @@ export default {
   },
   methods: {
     createNewRecord() {
-      const Note = this.$store.getters.archetypes.find(arch => arch.name === 'Note')
       this.$db
-        .create(generateRecord(Note))
+        .create(generateRecord(this.archetype))
         .then(record => {
           this.$store.commit('selectRecord', record)
         })
