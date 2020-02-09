@@ -2,11 +2,15 @@
   <aside class="flex-menu">
       
     <template v-if="$store.state.activeMenuTab === 'explorer'">
-      <record-browser key="explorer" />
+      <record-browser
+        v-for="archetype in $store.getters.archetypes"
+        :archetype="archetype"
+        :key="archetype.name"
+      />
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'types'">
-      <record-browser key="types" archetype />
+      <archetype-browser/>
     </template>
     
     <template v-if="$store.state.activeMenuTab === 'settings'">
@@ -18,11 +22,13 @@
 
 <script>
 import RecordBrowser from '@/components/RecordBrowser.vue'
+import ArchetypeBrowser from '@/components/ArchetypeBrowser.vue'
 import FlexMenuTile from '@/components/FlexMenuTile.vue'
 
 export default {
   components: {
     RecordBrowser,
+    ArchetypeBrowser,
     FlexMenuTile
   }
 }

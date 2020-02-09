@@ -1,5 +1,5 @@
 <template>
-  <div class="record-browser" :class="{ collapsed: isCollapsed }">
+  <div class="archetype-browser" :class="{ collapsed: isCollapsed }">
     <div class="header">
       <button
         @click="isCollapsed = !isCollapsed"
@@ -7,25 +7,25 @@
         class="btn expand-collapse"
       >
         <span class="mdi mdi-triangle"/>
-        <span class="category">{{ this.archetype.namePlural }} ({{ records.length }})</span>
+        <span class="category">Archetypes ({{ archetypes.length }})</span>
       </button>
       <button
-        @click="createNewRecord"
-        title="Create new record" 
-        class="btn new-record"
+        @click="createNewArchetype"
+        title="Create new archetype" 
+        class="btn new-archetype"
       >
-        <span class="mdi mdi-plus"/>
+        <span class="mdi mdi-shape-plus"/>
       </button>
     </div>
-    <div class="records" v-if="!isCollapsed && records.length">
+    <div class="archetypes" v-if="!isCollapsed && archetypes.length">
       <div
-        :key="record._id"
-        v-for="record in sortedRecords"
+        :key="archetype._id"
+        v-for="archetype in sortedArchetypes"
         class="note"
-        :class="{ selected: record._id === selectedRecordId }"
-        @click="$store.commit('selectRecord', record)"
+        :class="{ selected: archetype._id === selectedArchetypeId }"
+        @click="$store.commit('selectRecord', archetype)"
       >
-        <h3 :key="record._id+'-heading'" v-html="record.title || record.name || 'Untitled'"/>
+        <h3 :key="archetype._id+'-heading'" v-html="archetype.title || archetype.name || 'Untitled'"/>
       </div>
     </div>
   </div>
@@ -36,10 +36,6 @@ import { generateRecord } from 'odyssey-core'
 
 export default {
   props: {
-    archetype: {
-      type: Object,
-      required: true
-    },
     collapsed: {
       type: Boolean,
       default: false
@@ -51,14 +47,14 @@ export default {
     }
   },
   computed: {
-    records() {
-      return this.$store.getters.instances.filter(record => record.__meta__.archetype === this.archetype.name)
+    archetypes() {
+      return this.$store.getters.archetypes
     },
-    selectedRecordId() {
+    selectedArchetypeId() {
       return (this.$store.state.selectedRecord || {})._id
     },
-    sortedRecords() {
-      return this.records.sort((a, b) => {
+    sortedArchetypes() {
+      return this.archetypes.sort((a, b) => {
         if (a.__meta__.created === b.__meta__.created) return 0;
         
         return !(a.__meta__.created < b.__meta__.created)
@@ -68,20 +64,19 @@ export default {
     }
   },
   methods: {
-    createNewRecord() {
-      const Note = this.$store.getters.archetypes.find(arch => arch.name === 'Note')
+    createNewArchetype() {
       this.$db
-        .create(generateRecord(Note))
-        .then(record => {
-          this.$store.commit('selectRecord', record)
-        })
+        // .create(generateArchetype(''))
+        // .then(record => {
+        //   this.$store.commit('selectRecord', record)
+        // })
     }
   },
 };
 </script>
 
 <style scoped>
-.record-browser {
+.archetype-browser {
   --border-width: 1px;
   --header-height: 2rem;
   width: 100%;
@@ -91,7 +86,7 @@ export default {
   background: rgba(0,0,0,0.1);
   flex: 0 1 auto;
 }
-.record-browser.collapsed {
+.archetype-browser.collapsed {
   flex: 0 0 auto;
 }
 .header {
@@ -118,7 +113,7 @@ export default {
   transform: rotate(180deg);
   transition: transform 200ms;
 }
-.record-browser.collapsed .header .expand-collapse .mdi {
+.archetype-browser.collapsed .header .expand-collapse .mdi {
   transform: rotate(90deg);
 }
 .header .btn {
@@ -135,16 +130,16 @@ export default {
 .header .btn:hover {
   color: rgba(0,0,0,0.8);
 }
-.header .new-record.btn {
+.header .new-archetype.btn {
   width: 2rem;
   font-size: 1.5rem;
 }
-.record-browser .records {
+.archetype-browser .archetypes {
   overflow-y: auto;
   text-overflow: ellipsis;
   max-height: calc(100% - var(--header-height) - var(--border-width));
 }
-.record-browser .records {
+.archetype-browser .archetypes {
   padding: 0 1rem;
 }
 .note {
