@@ -13,9 +13,11 @@ export default new Vuex.Store({
   },
   getters: {
     liveRecord(state) {
-      return state.selectedRecord
+      const liveRecord = state.selectedRecord
         ? state.allRecords.find(record => record._id === state.selectedRecord._id)
         : {}
+      console.log(liveRecord)
+      return liveRecord
     },
     archetypes(state) {
       return state.allRecords.filter(record => record.archetype)
@@ -23,9 +25,9 @@ export default new Vuex.Store({
     archetypeOf: (_state, getters) => instance => instance 
       && getters.archetypes.find(arch => arch._id === instance.__meta__.archetype)
     ,
-    selectedRecordArchetype: (state, getters) => getters.archetypeOf(state.selectedRecord),
+    selectedRecordArchetype: (_state, getters) => getters.archetypeOf(getters.liveRecord),
     resolved: (_state, getters) => record => record && resolveRecord(record, getters.archetypeOf(record)),
-    selectedRecordResolved: (state, getters) => getters.resolved(state.selectedRecord),
+    selectedRecordResolved: (_state, getters) => getters.resolved(getters.liveRecord),
     instances(state) {
       return state.allRecords.filter(record => !record.archetype)
     },
