@@ -76,7 +76,7 @@ export default {
           this.$store.commit('selectRecord', record)
         })
     }
-  },
+  }
 };
 </script>
 
@@ -92,7 +92,8 @@ export default {
   flex: 0 1 auto;
 }
 .record-browser.collapsed {
-  flex: 0 0 auto;
+  height: var(--header-height);
+  flex: none;
 }
 .header {
   border-top: 2px solid rgba(0,0,0,0.2);
@@ -102,7 +103,7 @@ export default {
   font-size: 1rem;
   color: rgba(0,0,0,0.6);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 2rem;
+  height: var(--header-height);
 }
 .expand-collapse { 
   flex: 1 1 0%;
@@ -147,6 +148,9 @@ export default {
 .record-browser .records {
   padding: 0 1rem;
 }
+.note.selected {
+  background: rgba(0,0,0,0.2);
+}
 .note {
   /* border: 1px solid #bbb; */
   margin: 0 -1rem;
@@ -155,15 +159,6 @@ export default {
 }
 .note:hover {
   background: rgba(0,0,0,0.1);
-}
-.note:first-child {
-  padding: 0 1rem 0.5rem;
-}
-.note:last-child {
-  padding: 0.5rem 1rem 0;
-}
-.note:first-child:last-child {
-  padding: 0.5rem 1rem;
 }
 .note h3 {
   margin: 0 0 0 0;

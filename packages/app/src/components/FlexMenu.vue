@@ -6,6 +6,7 @@
         v-for="archetype in $store.getters.archetypes.sort((a, b) => a.name > b.name ? 1 : -1)"
         :archetype="archetype"
         :key="archetype.name"
+        collapsed
       />
     </template>
     
@@ -41,5 +42,6 @@ export default {
   border-right: 1px solid rgba(0,0,0,0.6);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 </style>
