@@ -1,13 +1,12 @@
 <template>
   <field class="json" :label="label">
     <div class="toolbar">
-      <div class="validity-indicator" :class="{ valid, invalid: !valid }">
+      <div v-if="editable" class="validity-indicator" :class="{ valid, invalid: !valid }">
         <span v-if="valid" class="mdi mdi-check-circle"/>
         <span v-else class="mdi mdi-alert-circle"/>
       </div>
     </div>
     <text-area-widget
-      class="view"
       :value="originalText"
       :editable="editable"
       @input="handleUnsavedText"
@@ -71,9 +70,10 @@ export default {
 </script>
 
 <style scoped>
-.view {
+.widget {
   height: 50vh;
   width: 100%;
+  margin-bottom: 2rem;
 }
 .validity-indicator {
   font-size: 1rem;
