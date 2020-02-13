@@ -66,9 +66,14 @@
         <template v-else-if="currentView === 'json'">
           <json-field
             v-model="recordJson" 
-            :key="selectedRecordId+'-definition'" 
+            :key="selectedRecordId+'-json'" 
             editable
             label="Raw JSON"
+          />
+          <json-field
+            :value="JSON.stringify($store.getters.selectedRecordResolved, null, 2)" 
+            :key="selectedRecordId+'-resolved-json'" 
+            label="Resolved JSON"
           />
         </template>
       </div>
@@ -111,7 +116,7 @@ export default {
     recordJson: {
       get() {
         const { _id, ...safeRecord} = this.record
-        return JSON.stringify(safeRecord || '')
+        return JSON.stringify(safeRecord || '', null, 2)
       },
       set(val) {
         const currentRecord = this.record
@@ -158,8 +163,6 @@ export default {
 .current-view {
   position: relative;
   width: 100%;
-  height: 100%;
-  overflow: auto;
 }
 .view-switcher {
   position: absolute;
