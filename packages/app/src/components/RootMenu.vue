@@ -1,51 +1,94 @@
 <template>
   <aside class="root-menu">
-    <div class="root-menu-tile"
-      :class="{ active: $store.state.activeMenuTab === 'explorer' }"
-      @click="$store.commit('setActiveMenuTab', 'explorer')"
-      title="Explorer"
-    >
-      <span class="mdi mdi-compass-rose"/>
-    </div>
-    <div class="root-menu-tile"
-      :class="{ active: $store.state.activeMenuTab === 'types' }"
-      @click="$store.commit('setActiveMenuTab', 'types')"
-      title="Data Types"
-    >
-      <span class="mdi mdi-shape"/>
-    </div>
-    <div class="root-menu-tile"
-      :class="{ active: $store.state.activeMenuTab === 'settings' }"
-      @click="$store.commit('setActiveMenuTab', 'settings')"
-      title="Settings"
-    >
-      <span class="mdi mdi-settings"/>
-    </div>
+    <root-menu-tile
+      v-for="menuItem in menuItems"
+      :key="menuItem.value"
+      :title="menuItem.title"
+      :value="menuItem.value"
+      :active="activeMenuTab === menuItem.value"
+      :icon="menuItem.icon"
+      @click="setActiveMenuTab"
+    />
   </aside>
 </template>
 
+<script>
+import RootMenuTile from './RootMenuTile.vue'
+import { mapState } from 'vuex'
+
+export default {
+  components: {
+    RootMenuTile
+  },
+  data() {
+    return {
+      menuItems: [
+        {
+          title: 'Project Explorer',
+          value: 'explorer',
+          icon: 'compass-rose'
+        },
+        {
+          title: 'Notes',
+          value: 'notes',
+          icon: 'book-multiple'
+        },
+        {
+          title: 'People and Groups',
+          value: 'people',
+          icon: 'at'
+        },
+        {
+          title: 'Places',
+          value: 'places',
+          icon: 'map-marker-multiple-outline'
+        },
+        {
+          title: 'Tasks',
+          value: 'tasks',
+          icon: 'check-box-multiple-outline'
+        },
+        {
+          title: 'Events',
+          value: 'events',
+          icon: 'calendar-outline'
+        },
+        {
+          title: 'Goals',
+          value: 'goals',
+          icon: 'target'
+        },
+        {
+          title: 'Archetypes',
+          value: 'archetypes',
+          icon: 'shape'
+        },
+        {
+          title: 'Settings',
+          value: 'settings',
+          icon: 'settings'
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapState(['activeMenuTab'])
+  },
+  methods: {
+    setActiveMenuTab(val) {
+      if (this.setActiveMenuTab !== val) {
+        this.$store.commit('setActiveMenuTab', val)
+      }
+    }
+  }
+}
+</script>
+
 <style scoped>
 .root-menu {
-  width: 4rem;
+  width: var(--root-menu-width);
   background: #777;
   display: flex;
   flex-direction: column;
-}
-.root-menu-tile {
-  height: 4rem;
-  width: 4rem;
-  color: white;
-  font-size: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 200ms;
-  cursor: pointer;
-}
-.root-menu-tile:hover {
-  background-color: rgba(0,0,0,0.2);
-}
-.root-menu-tile.active {
-  background-color: rgba(0,0,0,0.5);
 }
 </style>

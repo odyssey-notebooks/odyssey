@@ -37,6 +37,8 @@ export default {
   height: 100vh;
   overflow: hidden;
   display: flex;
+  /* Variables */
+  --root-menu-width: 3rem;
 }
 main {
   flex: 1 1 100%;
