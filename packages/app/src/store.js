@@ -88,13 +88,14 @@ export default new Vuex.Store({
           })
       })
     },
-    updateRecord(id, newRecord) {
+    updateRecord(_context, { _id: id, ...newRecord }) {
       newRecord.__meta__.updated = (new Date).toISOString()
       this.$db.update(id, newRecord)
     },
-    patchRecord(id, patch) {
+    patchRecord(context, { _id: id, ...patch }) {
       const updatedPatch = {
         __meta__: {
+          ...context.getters.liveRecord.__meta__,
           updated: (new Date).toISOString()
         },
         ...patch
