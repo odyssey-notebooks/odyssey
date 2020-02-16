@@ -58,7 +58,35 @@
               :value="field.value"
               :tags="$store.getters.tags"
               :label="field.label"
-              @input="value => patchField(field.key, value )"
+              @input="value => patchField(field.key, value)"
+              editable
+            />
+            <multiple-choice-field 
+              v-else-if="field.type === 'referenceSet'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value" 
+              :label="field.label" 
+              :options="$store.getters.instances
+                .filter(inst => (inst.__meta__.archetype === field.archetype) && !(inst._id === record._id))
+                .map(inst => ({
+                  value: inst._id,
+                  label: resolvedRecordToString($store.getters.resolved(inst)) || '(no text provided)'
+                }))" 
+              @input="value => patchField(field.key, value)"
+              editable
+            />
+            <multiple-choice-field 
+              v-else-if="field.type === 'selfReferenceSet'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value" 
+              :label="field.label" 
+              :options="$store.getters.instances
+                .filter(inst => (inst.__meta__.archetype === record.__meta__.archetype) && !(inst._id === record._id))
+                .map(inst => ({
+                  value: inst._id,
+                  label: resolvedRecordToString($store.getters.resolved(inst)) || '(no text provided)'
+                }))" 
+              @input="value => patchField(field.key, value)"
               editable
             />
           </template>
@@ -90,7 +118,8 @@ import {
   MarkdownField,
   JsonField,
   DropdownField,
-  CheckboxField
+  CheckboxField,
+  MultipleChoiceField
 } from 'odyssey-components';
 import { resolvedRecordToString } from 'odyssey-core';
 
@@ -101,7 +130,8 @@ export default {
     MarkdownField,
     JsonField,
     DropdownField,
-    CheckboxField
+    CheckboxField,
+    MultipleChoiceField
   },
   data() {
     return {
