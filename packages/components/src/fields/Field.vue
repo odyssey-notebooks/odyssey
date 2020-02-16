@@ -29,24 +29,20 @@ export default {
 </script>
 
 <style scoped>
-.field {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
 .label-wrapper {
   width: 150px;
   height: 100%;
+  padding-bottom: 0.75rem;
 }
 .field .widget-wrapper {
-  width: 75%;
+  width: 100%;
   height: 100%;
 }
 .field .widget-wrapper.full-width {
   width: 100%;
 }
 label {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-family: sans-serif;
 }
 .description {
