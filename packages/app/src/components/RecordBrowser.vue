@@ -25,7 +25,7 @@
         :class="{ selected: record._id === selectedRecordId }"
         @click="$store.commit('selectRecord', record)"
       >
-        <h3 :key="record._id+'-heading'" v-text="resolvedRecordToString($store.getters.resolved(record)) || 'Untitled'"/>
+        <h3 :key="record._id+'-heading'" v-html="resolvedRecordToString($store.getters.resolved(record)) || 'Untitled'"/>
       </div>
     </div>
   </div>
