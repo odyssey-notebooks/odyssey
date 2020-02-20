@@ -7,6 +7,7 @@ import MarkdownField from "./src/fields/MarkdownField.vue";
 import DropdownField from "./src/fields/DropdownField.vue";
 import CheckboxField from "./src/fields/CheckboxField.vue";
 import MultipleChoiceField from "./src/fields/MultipleChoiceField.vue";
+import IconField from "./src/fields/IconField.vue";
 
 import MarkdownPane from "./src/panes/MarkdownPane.vue";
 import InlineMarkdownPane from "./src/panes/InlineMarkdownPane.vue";
@@ -16,6 +17,7 @@ import TextAreaWidget from "./src/widgets/TextAreaWidget.vue";
 import DropdownWidget from "./src/widgets/DropdownWidget.vue";
 import CheckboxWidget from "./src/widgets/CheckboxWidget.vue";
 import MultipleSelectWidget from "./src/widgets/MultipleSelectWidget.vue";
+import IconWidget from "./src/widgets/IconWidget.vue";
 
 
 const components = {
@@ -28,6 +30,7 @@ const components = {
   DropdownField,
   CheckboxField,
   MultipleChoiceField,
+  IconField,
   // panes
   MarkdownPane,
   InlineMarkdownPane,
@@ -36,7 +39,8 @@ const components = {
   TextAreaWidget,
   DropdownWidget,
   CheckboxWidget,
-  MultipleSelectWidget
+  MultipleSelectWidget,
+  IconWidget
 };
 
 export {
@@ -51,6 +55,7 @@ export {
   DropdownField,
   CheckboxField,
   MultipleChoiceField,
+  IconField,
   // panes
   MarkdownPane,
   InlineMarkdownPane,
@@ -59,7 +64,8 @@ export {
   TextAreaWidget,
   DropdownWidget,
   CheckboxWidget,
-  MultipleSelectWidget
+  MultipleSelectWidget,
+  IconWidget
 };
 
 const plugin = {
