@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="label-wrapper" v-if="label">
-      <label v-text="label" :for="label"/>
+      <label class="field-label" v-text="label" :for="label"/>
       <markdown-pane class="description" v-if="description" :value="description"/>
     </div>
     <div class="widget-wrapper" :class="!label && 'full-width'">
@@ -41,7 +41,7 @@ export default {
 .field .widget-wrapper.full-width {
   width: 100%;
 }
-label {
+.field-label {
   font-size: 1.25rem;
   font-family: sans-serif;
 }
