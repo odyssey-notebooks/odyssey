@@ -9,6 +9,16 @@
       :icon="menuItem.icon"
       @click="setActiveMenuTab"
     />
+    <div class="divider"/>
+    <root-menu-tile
+      v-for="footerItem in footerItems"
+      :key="footerItem.value"
+      :title="footerItem.title"
+      :value="footerItem.value"
+      :active="activeMenuTab === footerItem.value"
+      :icon="footerItem.icon"
+      @click="setActiveMenuTab"
+    />
   </aside>
 </template>
 
@@ -26,22 +36,12 @@ export default {
         {
           title: 'Project Explorer',
           value: 'explorer',
-          icon: 'compass-rose'
+          icon: 'folder-multiple'
         },
         {
           title: 'Notes',
           value: 'notes',
           icon: 'book-multiple'
-        },
-        {
-          title: 'People and Groups',
-          value: 'people',
-          icon: 'at'
-        },
-        {
-          title: 'Places',
-          value: 'places',
-          icon: 'map-marker-multiple-outline'
         },
         {
           title: 'Tasks',
@@ -52,11 +52,13 @@ export default {
           title: 'Events',
           value: 'events',
           icon: 'calendar-outline'
-        },
+        }
+      ],
+      footerItems: [
         {
-          title: 'Goals',
-          value: 'goals',
-          icon: 'target'
+          title: 'Views',
+          value: 'views',
+          icon: 'eye'
         },
         {
           title: 'Archetypes',
@@ -90,5 +92,8 @@ export default {
   background: #777;
   display: flex;
   flex-direction: column;
+}
+.divider {
+  flex: 1;
 }
 </style>
