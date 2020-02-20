@@ -56,7 +56,6 @@
               v-else-if="field.type === 'checkbox'" 
               :key="field.key + ' - ' + selectedRecordId"
               :value="field.value"
-              :tags="$store.getters.tags"
               :label="field.label"
               @input="value => patchField(field.key, value)"
               editable
@@ -86,6 +85,14 @@
                   value: inst._id,
                   label: resolvedRecordToString($store.getters.resolved(inst)) || '(no text provided)'
                 }))" 
+              @input="value => patchField(field.key, value)"
+              editable
+            />
+            <icon-field
+              v-else-if="field.type === 'icon'" 
+              :key="field.key + ' - ' + selectedRecordId"
+              :value="field.value"
+              :label="field.label"
               @input="value => patchField(field.key, value)"
               editable
             />
@@ -119,7 +126,8 @@ import {
   JsonField,
   DropdownField,
   CheckboxField,
-  MultipleChoiceField
+  MultipleChoiceField,
+  IconField
 } from 'odyssey-components';
 import { resolvedRecordToString } from 'odyssey-core';
 
@@ -131,7 +139,8 @@ export default {
     JsonField,
     DropdownField,
     CheckboxField,
-    MultipleChoiceField
+    MultipleChoiceField,
+    IconField
   },
   data() {
     return {
