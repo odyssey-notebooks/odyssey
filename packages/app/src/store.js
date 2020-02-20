@@ -22,13 +22,16 @@ export default new Vuex.Store({
       return state.allRecords.filter(record => record.archetype)
     },
     archetypeOf: (_state, getters) => instance => instance 
-      && getters.archetypes.find(arch => arch._id === instance.__meta__.archetype)
-    ,
+      && getters.archetypes.find(arch => arch._id === instance.__meta__.archetype),
+    archetypeNamed: (_state, getters) => name => getters.archetypes.find(arch => arch.name === name),
     selectedRecordArchetype: (_state, getters) => getters.archetypeOf(getters.liveRecord),
     resolved: (_state, getters) => record => record && resolveRecord(record, getters.archetypeOf(record)),
     selectedRecordResolved: (_state, getters) => getters.resolved(getters.liveRecord),
-    instances(state) {
-      return state.allRecords.filter(record => !record.archetype)
+    instances: state => state.allRecords.filter(record => !record.archetype),
+    instancesOfArchetypeId: (_state, getters) => archetypeId => getters.instances.filter(inst => inst.__meta__.archetype === archetypeId) ,
+    instancesOfArchetypeName: (_state, getters) => name => {
+      const { _id: id } = getters.archetypeNamed(name) || {}
+      return getters.instancesOfArchetypeId(id)
     },
     tags(state) {
       const values = state.allRecords
