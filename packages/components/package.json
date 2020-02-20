@@ -7,6 +7,7 @@
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@mdi/js": "^4.9.95",
     "core-js": "^2.6.5",
     "highlight.js": "^9.15.6",
     "html-entities": "^1.2.1",
