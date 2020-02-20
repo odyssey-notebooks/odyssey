@@ -1,5 +1,14 @@
 <template>
   <aside class="flex-menu">
+
+    <div class="domains">
+      <div class="domain"
+        v-for="domain in domains"
+        :key="domain.name"
+      >
+        <span class="mdi" :class="`mdi-${ domain.icon }`"/>
+      </div>
+    </div>
       
     <template v-if="activeMenuTab === 'explorer'">
       <record-browser
@@ -83,6 +92,9 @@ export default {
     },
     archetypeNamed() {
       return name => this.$store.getters.archetypes.find(arch => arch.name === name)
+    },
+    domains() {
+      return this.$store.getters.instancesOfArchetypeName('Domain')
     }
   }
 }
@@ -96,5 +108,17 @@ export default {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+}
+.domains {
+  height: var(--root-menu-width);
+  display: flex;
+  align-items: center;
+}
+.domain {
+  height: var(--root-menu-width);
+  width: var(--root-menu-width);
+  font-size: calc(var(--root-menu-width) - 1rem);
+  line-height: var(--root-menu-width);
+  text-align: center;
 }
 </style>
