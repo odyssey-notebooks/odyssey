@@ -9,7 +9,7 @@
   "dependencies": {
     "@mdi/js": "^4.9.95",
     "core-js": "^2.6.5",
-    "highlight.js": "^9.15.6",
+    "highlight.js": "^10.4.1",
     "html-entities": "^1.2.1",
     "marked": "^0.7.0",
     "vue": "^2.6.10"
